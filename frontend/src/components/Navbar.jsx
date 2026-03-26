@@ -6,8 +6,11 @@ const Navbar = () => {
 
   return (
     <header className="navbar">
-      <h1>Retail Inventory System</h1>
-      <nav>
+      <div className="brand-block">
+        <h1>Retail Inventory System</h1>
+        <p>Inventory, orders, delivery and forecasting</p>
+      </div>
+      <nav className="nav-links">
         <Link to="/">Products</Link>
         {!isAuthenticated && <Link to="/login">Login</Link>}
         {!isAuthenticated && <Link to="/register">Register</Link>}
