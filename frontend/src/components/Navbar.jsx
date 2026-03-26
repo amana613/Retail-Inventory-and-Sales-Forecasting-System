@@ -7,8 +7,8 @@ const Navbar = () => {
   return (
     <header className="navbar">
       <div className="brand-block">
-        <h1>Retail Inventory System</h1>
-        <p>Inventory, orders, delivery and forecasting</p>
+        <h1>Retail Nexus</h1>
+        <p>Inventory intelligence, commerce flow, and demand forecasting</p>
       </div>
       <nav className="nav-links">
         <Link to="/">Products</Link>
@@ -18,9 +18,10 @@ const Navbar = () => {
         {isAuthenticated && user?.role === "customer" && <Link to="/orders">My Orders</Link>}
         {isAuthenticated && user?.role === "admin" && <Link to="/admin">Admin Dashboard</Link>}
         {isAuthenticated && user?.role === "rider" && <Link to="/rider">Rider Dashboard</Link>}
+        {isAuthenticated && <span className="role-pill">{user?.role}</span>}
         {isAuthenticated && (
           <button type="button" onClick={logout} className="link-button">
-            Logout ({user?.name})
+            Sign out {user?.name}
           </button>
         )}
       </nav>

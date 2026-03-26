@@ -8,6 +8,7 @@ const ProductDetailsPage = () => {
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [review, setReview] = useState({ rating: 5, comment: "" });
+  const [editingReviewId, setEditingReviewId] = useState("");
   const [message, setMessage] = useState("");
   const { user } = useAuth();
 
@@ -32,32 +33,66 @@ const ProductDetailsPage = () => {
     event.preventDefault();
 
     try {
-      await api.post("/reviews", {
-        product_id: id,
-        rating: Number(review.rating),
-        comment: review.comment
-      });
+      if (editingReviewId) {
+        await api.put(`/reviews/${editingReviewId}`, {
+          rating: Number(review.rating),
+          comment: review.comment
+        });
+        setMessage("Review updated");
+      } else {
+        await api.post("/reviews", {
+          product_id: id,
+          rating: Number(review.rating),
+          comment: review.comment
+        });
+        setMessage("Review submitted");
+      }
+
       setReview({ rating: 5, comment: "" });
-      setMessage("Review submitted");
+      setEditingReviewId("");
       loadData();
     } catch (error) {
       setMessage(error.response?.data?.message || "Could not submit review");
     }
   };
 
-  if (!product) return <p>Loading...</p>;
+  const startEditReview = (item) => {
+    setReview({ rating: item.rating, comment: item.comment || "" });
+    setEditingReviewId(item._id);
+  };
+
+  const removeReview = async (reviewId) => {
+    try {
+      await api.delete(`/reviews/${reviewId}`);
+      setMessage("Review deleted");
+      if (editingReviewId === reviewId) {
+        setEditingReviewId("");
+        setReview({ rating: 5, comment: "" });
+      }
+      loadData();
+    } catch (error) {
+      setMessage(error.response?.data?.message || "Could not delete review");
+    }
+  };
+
+  if (!product) return <p className="info-banner">Loading product details...</p>;
 
   return (
-    <section>
-      <article className="card">
+    <section className="section-stack">
+      <header className="page-header">
+        <h2>Product Details</h2>
+        <p>Review inventory, pricing, and customer feedback in one view.</p>
+      </header>
+
+      <article className="card product-hero">
         <h2>{product.name}</h2>
-        <p>Category: {product.category}</p>
-        <p>Price: ${product.price}</p>
-        <p>Stock: {product.stock_qty}</p>
+        <p className="muted">{product.category}</p>
+        <p className="metric">${product.price}</p>
+        <p><span className="label">Stock</span> {product.stock_qty}</p>
         {product.low_stock_alert && <p className="warning">Low stock alert</p>}
       </article>
 
-      {message && <p>{message}</p>}
+      {message && <p className="info-banner">{message}</p>}
 
       <section className="card">
         <h3>Reviews</h3>
@@ -65,16 +100,26 @@ const ProductDetailsPage = () => {
         {reviews.map((item) => (
           <div key={item._id} className="list-item">
             <p>
-              <strong>{item.user_id?.name || "Unknown"}</strong> - {item.rating}/5
+              <strong>{item.user_id?.name || "Unknown"}</strong> • {item.rating}/5
             </p>
             <p>{item.comment}</p>
+            {(user?._id === item.user_id?._id || user?.role === "admin") && (
+              <div className="action-row">
+                <button type="button" onClick={() => startEditReview(item)}>
+                  Edit
+                </button>
+                <button type="button" onClick={() => removeReview(item._id)}>
+                  Delete
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </section>
 
       {user?.role === "customer" && (
         <section className="card">
-          <h3>Write a Review</h3>
+          <h3>{editingReviewId ? "Edit Review" : "Write a Review"}</h3>
           <form onSubmit={submitReview}>
             <select
               value={review.rating}
@@ -92,6 +137,17 @@ const ProductDetailsPage = () => {
               onChange={(e) => setReview((prev) => ({ ...prev, comment: e.target.value }))}
             />
             <button type="submit">Submit Review</button>
+            {editingReviewId && (
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingReviewId("");
+                  setReview({ rating: 5, comment: "" });
+                }}
+              >
+                Cancel Edit
+              </button>
+            )}
           </form>
         </section>
       )}

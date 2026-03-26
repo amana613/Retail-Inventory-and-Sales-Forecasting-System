@@ -31,23 +31,32 @@ const ProductListPage = () => {
   };
 
   return (
-    <section>
-      <h2>Products</h2>
-      {message && <p>{message}</p>}
+    <section className="section-stack">
+      <header className="page-header">
+        <h2>Explore Products</h2>
+        <p>Discover inventory across categories and quickly spot low stock signals.</p>
+      </header>
+      {message && <p className="info-banner">{message}</p>}
       <div className="grid">
         {products.map((product) => (
-          <article className="card" key={product._id}>
+          <article className="card product-card" key={product._id}>
             <h3>{product.name}</h3>
-            <p>Category: {product.category}</p>
-            <p>Price: ${product.price}</p>
-            <p>Stock: {product.stock_qty}</p>
+            <p className="muted">{product.category}</p>
+            <p className="metric">${product.price}</p>
+            <p>
+              <span className="label">Stock</span> {product.stock_qty}
+            </p>
             {product.low_stock_alert && <p className="warning">Low stock alert</p>}
-            <Link to={`/products/${product._id}`}>View Details</Link>
-            {user?.role === "customer" && (
-              <button type="button" onClick={() => addToWishlist(product._id)}>
-                Add to Wishlist
-              </button>
-            )}
+            <div className="action-row">
+              <Link to={`/products/${product._id}`} className="btn-link">
+                View Details
+              </Link>
+              {user?.role === "customer" && (
+                <button type="button" onClick={() => addToWishlist(product._id)}>
+                  Add to Wishlist
+                </button>
+              )}
+            </div>
           </article>
         ))}
       </div>

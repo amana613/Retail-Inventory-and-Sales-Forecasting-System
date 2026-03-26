@@ -27,8 +27,11 @@ const LoginPage = () => {
   };
 
   return (
-    <section className="card form-card">
-      <h2>Login</h2>
+    <section className="card form-card section-stack">
+      <header className="page-header compact">
+        <h2>Welcome Back</h2>
+        <p>Sign in to manage orders, deliveries, or inventory operations.</p>
+      </header>
       <form onSubmit={handleSubmit}>
         <input name="email" placeholder="Email" value={form.email} onChange={handleChange} />
         <input

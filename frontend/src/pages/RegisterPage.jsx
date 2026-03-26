@@ -25,8 +25,11 @@ const RegisterPage = () => {
   };
 
   return (
-    <section className="card form-card">
-      <h2>Register</h2>
+    <section className="card form-card section-stack">
+      <header className="page-header compact">
+        <h2>Create Account</h2>
+        <p>Register as a customer, rider, or admin to access role-specific tools.</p>
+      </header>
       <form onSubmit={handleSubmit}>
         <input name="name" placeholder="Name" value={form.name} onChange={handleChange} />
         <input name="email" placeholder="Email" value={form.email} onChange={handleChange} />

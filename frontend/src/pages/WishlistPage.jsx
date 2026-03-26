@@ -29,14 +29,17 @@ const WishlistPage = () => {
   };
 
   return (
-    <section>
-      <h2>My Wishlist</h2>
-      {message && <p>{message}</p>}
+    <section className="section-stack">
+      <header className="page-header">
+        <h2>My Wishlist</h2>
+        <p>Keep track of products you plan to purchase soon.</p>
+      </header>
+      {message && <p className="info-banner">{message}</p>}
       <div className="grid">
         {items.map((item) => (
-          <article className="card" key={item._id}>
+          <article className="card product-card" key={item._id}>
             <h3>{item.product_id?.name}</h3>
-            <p>Price: ${item.product_id?.price}</p>
+            <p className="metric">${item.product_id?.price}</p>
             <button type="button" onClick={() => removeItem(item.product_id?._id)}>
               Remove
             </button>

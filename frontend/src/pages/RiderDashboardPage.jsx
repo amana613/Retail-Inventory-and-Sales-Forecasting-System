@@ -29,23 +29,28 @@ const RiderDashboardPage = () => {
   };
 
   return (
-    <section>
-      <h2>Rider Dashboard</h2>
-      {message && <p>{message}</p>}
+    <section className="section-stack">
+      <header className="page-header">
+        <h2>Rider Dispatch Board</h2>
+        <p>View assigned deliveries and move orders from processing to delivered.</p>
+      </header>
+      {message && <p className="info-banner">{message}</p>}
       <div className="grid">
         {deliveries.map((delivery) => (
           <article className="card" key={delivery._id}>
-            <p>Order: {delivery.order_id?._id}</p>
-            <p>Status: {delivery.status}</p>
-            <button type="button" onClick={() => updateStatus(delivery._id, "processing")}>
-              Processing
-            </button>
-            <button type="button" onClick={() => updateStatus(delivery._id, "dispatched")}>
-              Dispatched
-            </button>
-            <button type="button" onClick={() => updateStatus(delivery._id, "delivered")}>
-              Delivered
-            </button>
+            <p><span className="label">Order</span> {delivery.order_id?._id}</p>
+            <p><span className="label">Status</span> {delivery.status}</p>
+            <div className="action-row">
+              <button type="button" onClick={() => updateStatus(delivery._id, "processing")}>
+                Processing
+              </button>
+              <button type="button" onClick={() => updateStatus(delivery._id, "dispatched")}>
+                Dispatched
+              </button>
+              <button type="button" onClick={() => updateStatus(delivery._id, "delivered")}>
+                Delivered
+              </button>
+            </div>
           </article>
         ))}
       </div>

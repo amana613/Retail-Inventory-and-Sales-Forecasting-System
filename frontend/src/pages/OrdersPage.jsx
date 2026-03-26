@@ -6,6 +6,7 @@ const OrdersPage = () => {
   const [products, setProducts] = useState([]);
   const [message, setMessage] = useState("");
   const [selection, setSelection] = useState({ product_id: "", quantity: 1 });
+  const [qtyEdit, setQtyEdit] = useState({});
 
   const loadData = async () => {
     try {
@@ -57,6 +58,39 @@ const OrdersPage = () => {
     }
   };
 
+  const updateOrderQuantity = async (order) => {
+    if (!order.items?.[0]) {
+      setMessage("Only orders with items can be updated");
+      return;
+    }
+
+    const newQty = Number(qtyEdit[order._id]);
+    if (Number.isNaN(newQty) || newQty < 1) {
+      setMessage("Enter a valid quantity");
+      return;
+    }
+
+    const firstItem = order.items[0];
+    const productId = firstItem.product_id?._id || firstItem.product_id;
+
+    try {
+      await api.put(`/orders/${order._id}`, {
+        items: [
+          {
+            product_id: productId,
+            quantity: newQty,
+            price: firstItem.price
+          }
+        ]
+      });
+      setMessage("Order updated");
+      setQtyEdit((prev) => ({ ...prev, [order._id]: "" }));
+      loadData();
+    } catch (error) {
+      setMessage(error.response?.data?.message || "Could not update order");
+    }
+  };
+
   const payOrder = async (orderId) => {
     try {
       await api.post("/payments", { order_id: orderId, method: "simulated" });
@@ -67,9 +101,12 @@ const OrdersPage = () => {
   };
 
   return (
-    <section>
-      <h2>My Orders</h2>
-      {message && <p>{message}</p>}
+    <section className="section-stack">
+      <header className="page-header">
+        <h2>Order Center</h2>
+        <p>Create, update, pay, and track all of your order activity.</p>
+      </header>
+      {message && <p className="info-banner">{message}</p>}
 
       <section className="card">
         <h3>Create Order</h3>
@@ -97,8 +134,8 @@ const OrdersPage = () => {
       <div className="grid">
         {orders.map((order) => (
           <article className="card" key={order._id}>
-            <p>Status: {order.status}</p>
-            <p>Total: ${order.total_amount}</p>
+            <p><span className="label">Status</span> {order.status}</p>
+            <p className="metric">${order.total_amount}</p>
             <ul>
               {order.items.map((item, index) => (
                 <li key={index}>
@@ -106,14 +143,30 @@ const OrdersPage = () => {
                 </li>
               ))}
             </ul>
-            {order.status !== "cancelled" && (
-              <button type="button" onClick={() => cancelOrder(order._id)}>
-                Cancel
+            <div className="action-row">
+              {order.status !== "cancelled" && (
+                <button type="button" onClick={() => cancelOrder(order._id)}>
+                  Cancel
+                </button>
+              )}
+              <button type="button" onClick={() => payOrder(order._id)}>
+                Pay
               </button>
+            </div>
+            {order.status === "pending" && (
+              <div className="inline-form">
+                <input
+                  type="number"
+                  min="1"
+                  placeholder="Update qty (first item)"
+                  value={qtyEdit[order._id] || ""}
+                  onChange={(e) => setQtyEdit((prev) => ({ ...prev, [order._id]: e.target.value }))}
+                />
+                <button type="button" onClick={() => updateOrderQuantity(order)}>
+                  Update
+                </button>
+              </div>
             )}
-            <button type="button" onClick={() => payOrder(order._id)}>
-              Pay
-            </button>
           </article>
         ))}
       </div>
