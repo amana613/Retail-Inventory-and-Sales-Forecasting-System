@@ -81,7 +81,7 @@ const ProductDetailsPage = () => {
     <section className="section-stack">
       <header className="page-header">
         <h2>Product Details</h2>
-        <p>Review inventory, pricing, and customer feedback in one view.</p>
+        <p>Product information, ratings, and customer reviews.</p>
       </header>
 
       <article className="card product-hero">
@@ -90,6 +90,7 @@ const ProductDetailsPage = () => {
         <p className="metric">${product.price}</p>
         <p><span className="label">Stock</span> {product.stock_qty}</p>
         {product.low_stock_alert && <p className="warning">Low stock alert</p>}
+        {!product.low_stock_alert && <p className="deal-pill">Everyday low price</p>}
       </article>
 
       {message && <p className="info-banner">{message}</p>}
