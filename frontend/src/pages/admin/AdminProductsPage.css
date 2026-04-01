@@ -1,0 +1,66 @@
+.admin-products-page {
+  padding: 24px;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.admin-products-page h1 {
+  font-size: 1.5rem;
+  color: var(--text-dark);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin-table th {
+  background-color: var(--background-color);
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.admin-table tbody tr:hover {
+  background-color: var(--background-color);
+}
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.btn-icon:hover {
+  color: var(--primary-color);
+}
+
+.btn-icon.danger:hover {
+  color: var(--danger-red);
+}

@@ -1,0 +1,130 @@
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 160px); /* Account for navbar and footer */
+  padding: 2rem 1rem;
+  background-color: var(--color-background);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 2.5rem;
+  border: 1px solid var(--color-border);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-header h2 {
+  font-size: 1.75rem;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.auth-header p {
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--color-text-light);
+}
+
+.input-with-icon input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-with-icon input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.1);
+}
+
+.auth-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-light);
+  cursor: pointer;
+}
+
+.forgot-password {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-btn {
+  margin-top: 1rem;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.auth-footer {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--color-text-light);
+}
+
+.auth-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}

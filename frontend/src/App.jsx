@@ -1,121 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import StorefrontLayout from './layouts/StorefrontLayout';
+import StorefrontHomePage from './pages/StorefrontHomePage';
+import ProductDetailsPage from './pages/ProductDetailsPage';
+import CartPage from './pages/CartPage';
+import ShippingPage from './pages/ShippingPage';
+import PaymentPage from './pages/PaymentPage';
+import PlaceOrderPage from './pages/PlaceOrderPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+
+// Admin Pages
+import AdminLayout from './layouts/AdminLayout';
+import AdminDashboardPage from './pages/admin/AdminDashboardPage';
+import AdminProductsPage from './pages/admin/AdminProductsPage';
+import AdminOrdersPage from './pages/admin/AdminOrdersPage';
+import AdminSuppliersPage from './pages/admin/AdminSuppliersPage';
+
+// Rider Pages
+import RiderLayout from './layouts/RiderLayout';
+import RiderDashboard from './pages/rider/RiderDashboard';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <Router>
+      <Routes>
+        {/* Public Auth Routes */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
 
-      <div className="ticks"></div>
+        {/* Customer Storefront Routes */}
+        <Route path="/" element={<StorefrontLayout />}>
+          <Route index element={<StorefrontHomePage />} />
+          <Route path="product/:id" element={<ProductDetailsPage />} />
+          <Route path="cart/:id?" element={<CartPage />} />
+          <Route path="cart" element={<CartPage />} />
+          <Route path="shipping" element={<ShippingPage />} />
+          <Route path="payment" element={<PaymentPage />} />
+          <Route path="placeorder" element={<PlaceOrderPage />} />
+        </Route>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {/* Admin Dashboard Routes */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboardPage />} />
+          <Route path="products" element={<AdminProductsPage />} />
+          <Route path="orders" element={<AdminOrdersPage />} />
+          <Route path="suppliers" element={<AdminSuppliersPage />} />
+          {/* Other admin routes to be added */}
+        </Route>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        {/* Rider Dashboard Routes */}
+        <Route path="/rider" element={<RiderLayout />}>
+          <Route index element={<RiderDashboard />} />
+          {/* Other rider routes to be added */}
+        </Route>
+
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
