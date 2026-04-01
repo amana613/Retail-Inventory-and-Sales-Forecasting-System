@@ -28,7 +28,7 @@ const Navbar = () => {
       {/* Main Navbar */}
       <div className="main-nav container">
         {/* Brand / Logo */}
-        <Link to="/" className="logo-section">
+        <Link to="/" className="logo-section" style={{textDecoration: 'none'}}>
           <span style={{ color: 'var(--primary-red)', fontWeight: 800, fontSize: '1.8rem' }}>RETAIL</span>
           <span style={{ color: 'var(--dark-ui)', fontWeight: 800, fontSize: '1.8rem' }}>PRO</span>
         </Link>
@@ -87,13 +87,13 @@ const Navbar = () => {
       {/* Categories Nav (Inspired by SPAR) */}
       <div className="category-nav">
         <div className="container category-list">
-          <button className="all-categories-btn">
-            <Menu size={20} /> All Categories
-          </button>
-          <Link to="/category/groceries">Groceries</Link>
-          <Link to="/category/health-beauty">Health & Beauty</Link>
-          <Link to="/category/household">Household Essentials</Link>
-          <Link to="/category/offers" className="offers-link" style={{ color: 'var(--primary-red)', fontWeight: 'bold' }}>Offers & Promotions</Link>
+          <Link to="/shop" className="all-categories-btn" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <Menu size={20} /> Shop All
+          </Link>
+          <Link to="/shop?category=Groceries">Groceries</Link>
+          <Link to="/shop?category=Health+%26+Beauty">Health & Beauty</Link>
+          <Link to="/shop?category=Household">Household Essentials</Link>
+          <Link to="/shop?category=Offers" className="offers-link" style={{ color: 'var(--primary-red)', fontWeight: 'bold' }}>Offers & Promotions</Link>
         </div>
       </div>
     </header>

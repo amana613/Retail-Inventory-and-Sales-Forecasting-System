@@ -18,7 +18,7 @@ const ProductDetailsPage = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const { data } = await axios.get(`/api/products/${id}`);
         setProduct(data);
         setLoading(false);
       } catch (err) {
@@ -38,29 +38,29 @@ const ProductDetailsPage = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="product-details-container">
+<div className="product-details-container container">
       <div className="breadcrumb">
-        <Link className="back-link" to="/"><ArrowLeft size={16} /> Back to Store</Link>
+        <Link className="back-link" to="/shop"><ArrowLeft size={16} /> Back to Shop</Link>
       </div>
 
       <div className="product-details-card">
         <div className="product-image-section">
-          <img src={product.image || 'https://via.placeholder.com/400'} alt={product.name} className="main-product-image" />
+          <img src={product.image || 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800'} alt={product.name} className="main-product-image" />
         </div>
-        
+
         <div className="product-info-section">
           <div className="product-header">
-            <span className="product-brand">{product.brand}</span>
+            <span className="product-brand">{product.brand || product.category}</span>
             <h1 className="product-title">{product.name}</h1>
-            
+
             <div className="product-rating">
               <div className="stars">
                 {[...Array(5)].map((_, i) => (
-                  <Star 
-                    key={i} 
-                    size={16} 
-                    fill={i < Math.floor(product.rating || 0) ? "var(--color-warning)" : "none"} 
-                    color={i < Math.floor(product.rating || 0) ? "var(--color-warning)" : "#CBD5E1"} 
+                  <Star
+                    key={i}
+                    size={16}
+                    fill={i < Math.floor(product.rating || 0) ? "var(--warning-orange)" : "none"}
+                    color={i < Math.floor(product.rating || 0) ? "var(--warning-orange)" : "#CBD5E1"}
                   />
                 ))}
               </div>
@@ -69,10 +69,10 @@ const ProductDetailsPage = () => {
           </div>
 
           <div className="product-pricing">
-            <h2 className="current-price">Rs. {product.price?.toFixed(2)}</h2>
+            <h2 className="current-price">Rs. {product.price ? Number(product.price).toFixed(2) : '0.00'}</h2>  
           </div>
 
-          <p className="product-description">{product.description}</p>
+          <p className="product-description">{product.description || "No description available for this product."}</p>
 
           <div className="product-meta">
             <div className="meta-item">
