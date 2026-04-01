@@ -100,3 +100,51 @@ export const updateOrderToDelivered = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// @desc    Update order status (Processing, Shipped, etc)
+// @route   PUT /api/orders/:id/status
+// @access  Private/Admin
+export const updateOrderStatus = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    const { status } = req.body;
+
+    if (order) {
+      order.status = status || order.status;
+      const updatedOrder = await order.save();
+      res.json(updatedOrder);
+    } else {
+      res.status(404).json({ message: 'Order not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Update order to paid
+// @route   PUT /api/orders/:id/pay
+// @access  Private/Admin
+export const updateOrderToPaid = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (order) {
+      order.isPaid = true;
+      order.paidAt = Date.now();
+      // Only mock paypal response details
+      order.paymentResult = {
+        id: req.body.id || 'cash_on_delivery',
+        status: req.body.status || 'COMPLETED',
+        update_time: req.body.update_time || Date.now(),
+        email_address: req.body.email_address || 'admin@store.com',
+      };
+
+      const updatedOrder = await order.save();
+      res.json(updatedOrder);
+    } else {
+      res.status(404).json({ message: 'Order not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

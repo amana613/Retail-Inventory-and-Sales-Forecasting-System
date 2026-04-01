@@ -5,10 +5,10 @@ import Product from '../models/Product.js';
 // @access  Public
 export const getProducts = async (req, res) => {
   try {
-    const products = await Product.find({}).populate('supplier', 'name');
+    const products = await Product.find({}).populate('supplier_id', 'name');
     res.json(products);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: 'Server Error', error: error.message });
   }
 };
 
@@ -17,7 +17,7 @@ export const getProducts = async (req, res) => {
 // @access  Public
 export const getProductById = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id).populate('supplier', 'name');
+    const product = await Product.findById(req.params.id).populate('supplier_id', 'name');
     if (product) {
       res.json(product);
     } else {
@@ -39,16 +39,17 @@ export const createProduct = async (req, res) => {
       name,
       brand,
       category,
-      description,
-      price,
-      countInStock,
-      supplier,
-      image,
+      description: description || 'No description provided',
+      price: Number(price),
+      stock_qty: countInStock ? Number(countInStock) : 0,
+      supplier_id: supplier || null,
+      image_url: image || '',
     });
 
     const createdProduct = await product.save();
     res.status(201).json(createdProduct);
   } catch (error) {
+    console.error("Create Product Error:", error.message);
     res.status(400).json({ message: 'Invalid product data', error: error.message });
   }
 };
@@ -67,10 +68,10 @@ export const updateProduct = async (req, res) => {
       product.brand = brand || product.brand;
       product.category = category || product.category;
       product.description = description || product.description;
-      product.price = price || product.price;
-      product.countInStock = countInStock || product.countInStock;
-      product.supplier = supplier || product.supplier;
-      product.image = image || product.image;
+      product.price = price !== undefined ? Number(price) : product.price;
+      product.stock_qty = countInStock !== undefined ? Number(countInStock) : product.stock_qty;
+      product.supplier_id = supplier || product.supplier_id;
+      product.image_url = image || product.image_url;
 
       const updatedProduct = await product.save();
       res.json(updatedProduct);
