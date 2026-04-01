@@ -111,6 +111,34 @@ export const updateOrderStatus = async (req, res) => {
 
     if (order) {
       order.status = status || order.status;
+      
+      // If status is delivered, set the order to delivered state
+      if (order.status === 'delivered') {
+        order.isDelivered = true;
+        order.deliveredAt = Date.now();
+      }
+
+      const updatedOrder = await order.save();
+      res.json(updatedOrder);
+    } else {
+      res.status(404).json({ message: 'Order not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Assign rider to order
+// @route   PUT /api/orders/:id/assign
+// @access  Private/Admin
+export const assignRider = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    const { riderId } = req.body;
+
+    if (order) {
+      order.rider = riderId;
+      order.status = 'dispatched';
       const updatedOrder = await order.save();
       res.json(updatedOrder);
     } else {
@@ -141,6 +169,30 @@ export const updateOrderToPaid = async (req, res) => {
 
       const updatedOrder = await order.save();
       res.json(updatedOrder);
+    } else {
+      res.status(404).json({ message: 'Order not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Upload Receipt
+// @route   POST /api/orders/:id/receipt
+// @access  Private
+export const uploadReceipt = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    
+    if (order) {
+      if (req.file) {
+         // Using local storage for now, store file path in database
+         order.receiptImage = `/uploads/receipts/${req.file.filename}`;
+         const updatedOrder = await order.save();
+         res.json(updatedOrder);
+      } else {
+        res.status(400).json({ message: 'No image uploaded' });
+      }
     } else {
       res.status(404).json({ message: 'Order not found' });
     }

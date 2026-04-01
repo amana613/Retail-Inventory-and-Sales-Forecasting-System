@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import ProductCard from '../components/ProductCard';
+import Loader from '../components/Loader';
+import Message from '../components/Message';
 import './StorefrontHomePage.css';
 
 const StorefrontHomePage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -15,6 +19,7 @@ const StorefrontHomePage = () => {
         setLoading(false);
       } catch (error) {
         console.error('Error fetching products', error);
+        setError('Failed to fetch products. Please try again later.');
         setLoading(false);
       }
     };
@@ -47,7 +52,7 @@ const StorefrontHomePage = () => {
           <Link to="/shop?category=Household" className="category-card" style={{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&q=80&w=400)', backgroundSize: 'cover', color: 'white', textDecoration: 'none' }}>
             <h3>Household</h3>
           </Link>
-          <Link to="/shop?category=Beauty" className="category-card" style={{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(https://images.unsplash.com/photo-1596462502278-27bf85033c44?auto=format&fit=crop&q=80&w=400)', backgroundSize: 'cover', color: 'white', textDecoration: 'none' }}>
+          <Link to="/shop?category=Beauty" className="category-card" style={{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&q=80&w=400)', backgroundSize: 'cover', color: 'white', textDecoration: 'none' }}>
             <h3>Health & Beauty</h3>
           </Link>
           <Link to="/shop?category=Beverages" className="category-card" style={{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(https://images.unsplash.com/photo-1556881286-fc6915169721?auto=format&fit=crop&q=80&w=400)', backgroundSize: 'cover', color: 'white', textDecoration: 'none' }}>
@@ -64,32 +69,15 @@ const StorefrontHomePage = () => {
         </div>
 
         {loading ? (
-          <p>Loading products...</p>
+          <Loader text="Loading fresh products..." />
+        ) : error ? (
+          <Message variant="danger">{error}</Message>
         ) : products.length === 0 ? (
-          <p>No products found in the database. Please add some from the Admin Dashboard.</p>
+          <Message variant="warning">No products found in the database. Please add some from the Admin Dashboard.</Message>
         ) : (
           <div className="product-grid">
             {products.map(product => (
-              <div className="product-card" key={product._id}>
-                <Link to={`/product/${product._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  <div className="product-image-container" style={{height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden'}}>
-                    <img 
-                      src={product.image || 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=400'} 
-                      alt={product.name} 
-                      style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
-                    />
-                  </div>
-                  <div className="product-details">
-                    <h3 className="product-title">{product.name}</h3>
-                    <div className="price-section">
-                      <span className="sale-price">Rs. {Number(product.price).toFixed(2)}</span>
-                    </div>
-                  </div>
-                </Link>
-                <div style={{ padding: '0 1rem 1rem' }}>
-                  <Link to={`/product/${product._id}`} className="btn btn-primary" style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>View Details</Link>
-                </div>
-              </div>
+              <ProductCard key={product._id} product={product} />
             ))}
           </div>
         )}

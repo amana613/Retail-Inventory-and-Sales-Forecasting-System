@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useLocation } from 'react-router-dom';
+import ProductCard from '../components/ProductCard';
 import './ShopPage.css';
 import './StorefrontHomePage.css'; // Reuse product card styles
 
@@ -54,26 +55,7 @@ const ShopPage = () => {
                 </div>
               ) : (
                 products.map(product => (
-                  <div className="product-card" key={product._id}>
-                    <Link to={`/product/${product._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      <div className="product-image-container" style={{height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden'}}>
-                        <img 
-                          src={product.image || 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=400'} 
-                          alt={product.name} 
-                          style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
-                        />
-                      </div>
-                      <div className="product-details">
-                        <h3 className="product-title">{product.name}</h3>
-                        <div className="price-section">
-                          <span className="sale-price">Rs. {Number(product.price).toFixed(2)}</span>
-                        </div>
-                      </div>
-                    </Link>
-                    <div style={{ padding: '0 1rem 1rem' }}>
-                      <Link to={`/product/${product._id}`} className="btn btn-primary" style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>View Details</Link>
-                    </div>
-                  </div>
+                  <ProductCard key={product._id} product={product} />
                 ))
               )}
             </div>

@@ -13,6 +13,18 @@ export const getUsers = async (req, res) => {
   }
 };
 
+// @desc    Get all riders
+// @route   GET /api/users/riders
+// @access  Private/Admin
+export const getRiders = async (req, res) => {
+  try {
+    const riders = await User.find({ role: 'rider' }).select('-password');
+    res.json(riders);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
 // @desc    Create a new admin or rider
 // @route   POST /api/users
 // @access  Private/SuperAdmin

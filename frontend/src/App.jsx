@@ -9,6 +9,8 @@ import PaymentPage from './pages/PaymentPage';
 import PlaceOrderPage from './pages/PlaceOrderPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import OrderDetailsPage from './pages/OrderDetailsPage';
+import MyOrdersPage from './pages/MyOrdersPage';
 
 // Route protections
 import ProtectedRoute from './components/ProtectedRoute';
@@ -27,6 +29,8 @@ import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import AdminProductsPage from './pages/admin/AdminProductsPage';
 import AdminOrdersPage from './pages/admin/AdminOrdersPage';
 import AdminSuppliersPage from './pages/admin/AdminSuppliersPage';
+import AdminDeliveriesPage from './pages/admin/AdminDeliveriesPage';
+import AdminSettingsPage from './pages/admin/AdminSettingsPage';
 
 // Rider Pages
 import RiderLayout from './layouts/RiderLayout';
@@ -52,6 +56,8 @@ function App() {
             <Route path="shipping" element={<ShippingPage />} />
             <Route path="payment" element={<PaymentPage />} />
             <Route path="placeorder" element={<PlaceOrderPage />} />
+            <Route path="order/:id" element={<OrderDetailsPage />} />
+            <Route path="myorders" element={<MyOrdersPage />} />
           </Route>
         </Route>
 
@@ -63,6 +69,8 @@ function App() {
             <Route path="products" element={<AdminProductsPage />} />
             <Route path="orders" element={<AdminOrdersPage />} />
             <Route path="suppliers" element={<AdminSuppliersPage />} />
+            <Route path="deliveries" element={<AdminDeliveriesPage />} />
+            <Route path="settings" element={<AdminSettingsPage />} />
           </Route>
         </Route>
 
@@ -73,6 +81,8 @@ function App() {
             <Route path="products" element={<AdminProductsPage />} />
             <Route path="orders" element={<AdminOrdersPage />} />
             <Route path="suppliers" element={<AdminSuppliersPage />} />
+            <Route path="deliveries" element={<AdminDeliveriesPage />} />
+            <Route path="settings" element={<AdminSettingsPage />} />
             {/* Other admin routes to be added */}
           </Route>
         </Route>

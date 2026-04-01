@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Mail, Lock, LogIn, ArrowRight } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import './AuthPage.css';
@@ -10,7 +10,10 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useContext(AuthContext);
+
+  const redirect = new URLSearchParams(location.search).get('redirect') || '/';
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -22,7 +25,7 @@ const LoginPage = () => {
       
       if (user.role === 'admin') navigate('/admin');
       else if (user.role === 'rider') navigate('/rider');
-      else navigate('/');
+      else navigate(redirect);
       
     } catch (err) {
       setError(err);
@@ -90,7 +93,7 @@ const LoginPage = () => {
         <div className="auth-footer">
           <p>
             Don't have an account?{' '}
-            <Link to="/register" className="auth-link">
+            <Link to={redirect ? `/register?redirect=${redirect}` : '/register'} className="auth-link">
               Sign Up <ArrowRight size={14} />
             </Link>
           </p>

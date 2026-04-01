@@ -1,15 +1,24 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, ShoppingCart, Heart, User, ChevronDown, Menu } from 'lucide-react';
+import { Search, ShoppingCart, Heart, User, ChevronDown, Menu, LogOut } from 'lucide-react';
+import AuthContext from '../context/AuthContext';
 import './Navbar.css';
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const navigate = useNavigate();
+  const { user, logout } = useContext(AuthContext);
 
   const handleLoginSelect = (role) => {
     setIsDropdownOpen(false);
     navigate(`/login?role=${role}`);
+  };
+
+  const handleLogout = () => {
+    logout();
+    setIsUserDropdownOpen(false);
+    navigate('/login');
   };
 
   return (
@@ -47,30 +56,60 @@ const Navbar = () => {
 
         {/* Actions */}
         <div className="nav-actions">
-          {/* Login Dropdown */}
-          <div 
-            className="login-dropdown-container"
-            onMouseEnter={() => setIsDropdownOpen(true)}
-            onMouseLeave={() => setIsDropdownOpen(false)}
-          >
-            <button className="action-btn text-action">
-              <User size={20} /> 
-              <span>Login <ChevronDown size={14} /></span>
-            </button>
+          {user ? (
+            <div 
+              className="login-dropdown-container"
+              onMouseEnter={() => setIsUserDropdownOpen(true)}
+              onMouseLeave={() => setIsUserDropdownOpen(false)}
+              style={{ position: 'relative' }}
+            >
+              <button className="action-btn text-action">
+                <User size={20} /> 
+                <span>{user.name.split(' ')[0]} <ChevronDown size={14} /></span>
+              </button>
 
-            {isDropdownOpen && (
-              <div className="login-dropdown-menu">
-                <div className="dropdown-header">Login as:</div>
-                <button onClick={() => handleLoginSelect('customer')} className="dropdown-item">Customer</button>
-                <button onClick={() => handleLoginSelect('admin')} className="dropdown-item">Admin</button>
-                <button onClick={() => handleLoginSelect('rider')} className="dropdown-item">Rider</button>
+              {isUserDropdownOpen && (
+                <div className="login-dropdown-menu" style={{ minWidth: '150px' }}>
+                  <div className="dropdown-header">Hi, {user.name}</div>
+                  <Link to="/profile" className="dropdown-item" style={{ display: 'block', padding: '10px', textDecoration: 'none', color: '#333' }}>Profile</Link>
+                  <Link to="/myorders" className="dropdown-item" style={{ display: 'block', padding: '10px', textDecoration: 'none', color: '#333' }}>Orders</Link>
+                  {user.role === 'admin' && <Link to="/admin" className="dropdown-item" style={{ display: 'block', padding: '10px', textDecoration: 'none', color: '#333' }}>Dashboard</Link>}
+                  {user.role === 'superAdmin' && <Link to="/superadmin" className="dropdown-item" style={{ display: 'block', padding: '10px', textDecoration: 'none', color: '#333' }}>Dashboard</Link>}
+                  {user.role === 'rider' && <Link to="/rider" className="dropdown-item" style={{ display: 'block', padding: '10px', textDecoration: 'none', color: '#333' }}>Dashboard</Link>}
+                  <button onClick={handleLogout} className="dropdown-item" style={{ display: 'flex', alignItems: 'center', gap: '5px', width: '100%', textAlign: 'left', cursor: 'pointer', color: 'var(--primary-red)' }}>
+                    <LogOut size={16} /> Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              {/* Login Dropdown */}
+              <div 
+                className="login-dropdown-container"
+                onMouseEnter={() => setIsDropdownOpen(true)}
+                onMouseLeave={() => setIsDropdownOpen(false)}
+              >
+                <button className="action-btn text-action">
+                  <User size={20} /> 
+                  <span>Login <ChevronDown size={14} /></span>
+                </button>
+
+                {isDropdownOpen && (
+                  <div className="login-dropdown-menu">
+                    <div className="dropdown-header">Login as:</div>
+                    <button onClick={() => handleLoginSelect('customer')} className="dropdown-item">Customer</button>
+                    <button onClick={() => handleLoginSelect('admin')} className="dropdown-item">Admin</button>
+                    <button onClick={() => handleLoginSelect('rider')} className="dropdown-item">Rider</button>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          <Link to="/register" className="btn" style={{ backgroundColor: 'var(--secondary-orange)', color: 'white', marginLeft: '10px' }}>
-            Sign Up
-          </Link>
+              <Link to="/register" className="btn" style={{ backgroundColor: 'var(--secondary-orange)', color: 'white', marginLeft: '10px', padding: '8px 16px', borderRadius: '4px', textDecoration: 'none' }}>
+                Sign Up
+              </Link>
+            </>
+          )}
 
           <Link to="/wishlist" className="action-btn icon-only" style={{ marginLeft: '15px' }}>
             <Heart size={24} color="var(--dark-ui)" />

@@ -1,53 +1,105 @@
+/* CheckoutSteps.css */
+.checkout-steps-container {
+  position: relative;
+  max-width: 800px;
+  margin: 2rem auto 3rem;
+  padding: 0 1rem;
+}
+
+.checkout-progress {
+  position: absolute;
+  top: 24px;
+  left: 10%;
+  right: 10%;
+  height: 4px;
+  background-color: #e2e8f0;
+  z-index: 0;
+  border-radius: 4px;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background-color: var(--primary-red);
+  transition: width 0.4s ease;
+  border-radius: 4px;
+}
+
+.progress-bar.active { width: 33%; }
+.progress-bar.active-more { width: 66%; }
+.progress-bar.completed { width: 100%; }
+
 .checkout-steps {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 2rem auto;
-  max-width: 600px;
-  background: white;
-  padding: 1.5rem;
-  border-radius: var(--border-radius);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
 }
 
 .step {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
   text-align: center;
-  position: relative;
+  width: 80px;
 }
 
-.step:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: -50%;
-  width: 100%;
-  height: 2px;
-  background: var(--color-border);
-  transform: translateY(-50%);
-  z-index: 0;
+.step::after {
+  content: none !important;
+}
+
+.step-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #f8fafc;
+  border: 4px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  transition: all 0.3s ease;
+}
+
+.step.active .step-icon {
+  background-color: var(--white);
+  border-color: var(--primary-red);
+  color: var(--primary-red);
+  box-shadow: 0 0 0 4px rgba(229, 57, 53, 0.1);
 }
 
 .step a, .step span {
-  position: relative;
-  display: inline-block;
-  background: white;
-  padding: 0.5rem 1rem;
-  border-radius: 2rem;
-  font-weight: 500;
-  font-size: 0.9rem;
-  z-index: 1;
+  padding: 0;
+  background: transparent;
+  border: none !important;
+}
+
+.step-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b !important;
   text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: transparent !important;
+  border: none !important;
 }
 
-.step.active a {
-  color: var(--color-primary);
-  border: 2px solid var(--color-primary);
+.step.active .step-label {
+  color: var(--text-dark) !important;
 }
 
-.step.disabled span {
-  color: var(--color-text-light);
-  border: 2px solid var(--color-border);
+.step.active a.step-label:hover {
+  color: var(--primary-red) !important;
+}
+
+@media (max-width: 640px) {
+  .step-label { display: none; }
+  .checkout-progress { left: 15%; right: 15%; }
 }
 
 @media (max-width: 600px) {

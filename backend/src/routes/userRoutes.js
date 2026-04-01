@@ -1,8 +1,11 @@
 import express from 'express';
-import { getUsers, createUser, deleteUser } from '../controllers/userController.js';
-import { protect, superAdmin } from '../middlewares/authMiddleware.js';
+import { getUsers, createUser, deleteUser, getRiders } from '../controllers/userController.js';
+import { protect, superAdmin, admin } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
+
+router.route('/riders')
+  .get(protect, admin, getRiders);
 
 router.route('/')
   .get(protect, superAdmin, getUsers)

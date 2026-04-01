@@ -1,8 +1,10 @@
 import { useState, useContext, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { ShoppingCart, Heart, ArrowLeft, Star, Truck } from 'lucide-react';
+import { ShoppingCart, Heart, ArrowLeft, Star, Truck, Check, AlertCircle } from 'lucide-react';
 import { CartContext } from '../context/CartContext';
+import Loader from '../components/Loader';
+import Message from '../components/Message';
 import './ProductDetailsPage.css';
 
 const ProductDetailsPage = () => {
@@ -34,11 +36,11 @@ const ProductDetailsPage = () => {
     navigate('/cart');
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return <div style={{ height: '50vh', display: 'flex', alignItems: 'center' }}><Loader text="Loading product details..." /></div>;
+  if (error) return <div className="container" style={{ padding: '2rem 0' }}><Message variant="danger">{error}</Message></div>;
 
   return (
-<div className="product-details-container container">
+    <div className="product-details-container container">
       <div className="breadcrumb">
         <Link className="back-link" to="/shop"><ArrowLeft size={16} /> Back to Shop</Link>
       </div>

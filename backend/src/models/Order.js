@@ -66,6 +66,13 @@ const orderSchema = new mongoose.Schema(
       enum: ['pending', 'processing', 'dispatched', 'delivered', 'cancelled'],
       default: 'pending',
     },
+    rider: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    receiptImage: {
+      type: String,
+    },
   },
   {
     timestamps: true,

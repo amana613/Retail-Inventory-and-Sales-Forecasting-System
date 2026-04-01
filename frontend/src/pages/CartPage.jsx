@@ -2,14 +2,20 @@ import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Trash2, ArrowRight } from 'lucide-react';
 import { CartContext } from '../context/CartContext';
+import AuthContext from '../context/AuthContext';
 import './CartPage.css';
 
 const CartPage = () => {
   const { cartItems, removeFromCart, addToCart } = useContext(CartContext);
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const checkoutHandler = () => {
-    navigate('/login?redirect=/shipping');
+    if (user) {
+      navigate('/shipping');
+    } else {
+      navigate('/login?redirect=/shipping');
+    }
   };
 
   return (

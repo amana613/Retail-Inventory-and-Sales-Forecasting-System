@@ -40,7 +40,7 @@ const PlaceOrderPage = () => {
       };
 
       const { data } = await axios.post(
-        'http://localhost:5000/api/orders',
+        '/api/orders',
         {
           orderItems: cartItems,
           shippingAddress,
@@ -54,9 +54,8 @@ const PlaceOrderPage = () => {
       );
 
       clearCart();
-      // Normally we'd navigate to the order detail page here
       alert('Order placed successfully!');
-      navigate('/');
+      navigate(`/order/${data._id}`);
     } catch (error) {
       alert(error.response?.data?.message || 'Error occurred while placing the order');
     }
