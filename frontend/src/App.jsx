@@ -31,6 +31,7 @@ import AdminOrdersPage from './pages/admin/AdminOrdersPage';
 import AdminSuppliersPage from './pages/admin/AdminSuppliersPage';
 import AdminDeliveriesPage from './pages/admin/AdminDeliveriesPage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage';
+import AdminRestockPage from './pages/admin/AdminRestockPage';
 
 // Rider Pages
 import RiderLayout from './layouts/RiderLayout';
@@ -67,6 +68,7 @@ function App() {
             <Route index element={<SuperAdminDashboardPage />} />
             <Route path="admins" element={<SuperAdminAdminsPage />} />
             <Route path="products" element={<AdminProductsPage />} />
+            <Route path="restock" element={<AdminRestockPage />} />
             <Route path="orders" element={<AdminOrdersPage />} />
             <Route path="suppliers" element={<AdminSuppliersPage />} />
             <Route path="deliveries" element={<AdminDeliveriesPage />} />
@@ -79,6 +81,7 @@ function App() {
           <Route element={<AdminLayout />}>
             <Route index element={<AdminDashboardPage />} />
             <Route path="products" element={<AdminProductsPage />} />
+            <Route path="restock" element={<AdminRestockPage />} />
             <Route path="orders" element={<AdminOrdersPage />} />
             <Route path="suppliers" element={<AdminSuppliersPage />} />
             <Route path="deliveries" element={<AdminDeliveriesPage />} />

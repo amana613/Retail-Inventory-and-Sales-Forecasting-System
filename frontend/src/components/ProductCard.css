@@ -79,7 +79,7 @@
   align-items: center;
   justify-content: center;
   transform: translateY(20px);
-  opacity: 0;
+  opacity: 1;
   transition: all 0.3s ease;
 }
 
@@ -155,7 +155,7 @@
 }
 
 .product-card .current-price {
-  font-size: 0.7rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--text-dark);
 }

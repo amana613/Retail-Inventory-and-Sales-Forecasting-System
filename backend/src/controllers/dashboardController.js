@@ -23,6 +23,11 @@ export const getDashboardMetrics = async (req, res) => {
     // Calculate recent activity
     const recentOrders = await Order.find({}).sort({ createdAt: -1 }).limit(5).populate('user', 'name');
 
+    // Find products below their low_stock_threshold
+    const lowStockProducts = await Product.find({ 
+      $expr: { $lte: ["$stock_qty", "$low_stock_threshold"] } 
+    }).sort({ stock_qty: 1 }).limit(10);
+
     res.json({
       totalOrders,
       totalProducts,
@@ -30,6 +35,7 @@ export const getDashboardMetrics = async (req, res) => {
       totalSuppliers,
       totalRevenue: totalRevenue.toFixed(2),
       recentOrders,
+      lowStockProducts,
     });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching dashboard metrics', error: error.message });

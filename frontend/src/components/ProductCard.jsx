@@ -9,11 +9,11 @@ const ProductCard = ({ product }) => {
       <Link to={`/product/${product._id}`} className="product-image-link">
         <div className="product-image-wrapper">
           <img 
-            src={product.image || 'https://via.placeholder.com/400x400'} 
+            src={product.image_url || product.image || 'https://via.placeholder.com/400x400'} 
             alt={product.name} 
             className="product-image"
           />
-          {product.countInStock === 0 && (
+          {product.stock_qty === 0 && (
             <span className="out-of-stock-badge">Out of Stock</span>
           )}
           {/* Quick Actions Hover Overlay */}

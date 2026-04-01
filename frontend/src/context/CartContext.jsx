@@ -27,9 +27,9 @@ export const CartProvider = ({ children }) => {
     const item = {
       product: product._id,
       name: product.name,
-      image: product.image,
+      image: product.image_url || product.image,
       price: product.price,
-      countInStock: product.countInStock,
+      countInStock: product.stock_qty || product.countInStock,
       qty,
     };
 

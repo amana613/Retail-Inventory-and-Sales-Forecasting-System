@@ -46,7 +46,7 @@ const AdminOrdersPage = () => {
   const fetchRiders = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.get('/api/users/riders', config);
+      const { data } = await axios.get('/api/admins/riders', config);
       setRiders(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Failed to fetch riders', error);
@@ -166,13 +166,17 @@ const AdminOrdersPage = () => {
                       <select 
                         value={order.status || 'pending'} 
                         onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                        style={{ padding: '4px 8px', borderRadius: '4px', fontSize: '0.75rem', border: '1px solid #cbd5e1', background: '#f8fafc', outline: 'none', cursor: 'pointer' }}
+                        disabled={['in-transit', 'delivered'].includes(order.status)}
+                        style={{ padding: '4px 8px', borderRadius: '4px', fontSize: '0.75rem', border: '1px solid #cbd5e1', background: '#f8fafc', outline: 'none', cursor: ['in-transit', 'delivered'].includes(order.status) ? 'not-allowed' : 'pointer', opacity: ['in-transit', 'delivered'].includes(order.status) ? 0.7 : 1 }}
+                        title={['in-transit', 'delivered'].includes(order.status) ? "Status is now tracked by the assigned rider" : "Update order status up to dispatch"}
                       >
                         <option value="pending">Pending</option>
                         <option value="processing">Processing</option>
                         <option value="dispatched">Dispatched</option>
-                        <option value="delivered">Delivered</option>
                         <option value="cancelled">Cancelled</option>
+                        {['in-transit', 'delivered'].includes(order.status) && (
+                          <option value={order.status}>{order.status === 'in-transit' ? 'In Transit' : 'Delivered'}</option>
+                        )}
                       </select>
 
                       <select 

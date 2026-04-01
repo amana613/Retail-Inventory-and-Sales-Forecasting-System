@@ -21,7 +21,7 @@ router.route('/:id').get(protect, getOrderById);
 router.route('/:id/assign').put(protect, admin, assignRider);
 router.route('/:id/deliver').put(protect, adminOrRider, updateOrderToDelivered);
 router.route('/:id/pay').put(protect, admin, updateOrderToPaid);
-router.route('/:id/status').put(protect, admin, updateOrderStatus);
+router.route('/:id/status').put(protect, adminOrRider, updateOrderStatus);
 router.route('/:id/receipt').post(protect, upload.single('receiptImage'), uploadReceipt);
 
 export default router;

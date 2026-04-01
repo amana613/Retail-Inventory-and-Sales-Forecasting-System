@@ -33,7 +33,7 @@ export const getProductById = async (req, res) => {
 // @access  Private/Admin
 export const createProduct = async (req, res) => {
   try {
-    const { name, brand, category, description, price, countInStock, supplier, image } = req.body;
+    const { name, brand, category, description, price, countInStock, supplier, image, low_stock_threshold } = req.body;
 
     const product = new Product({
       name,
@@ -41,7 +41,8 @@ export const createProduct = async (req, res) => {
       category,
       description: description || 'No description provided',
       price: Number(price),
-      stock_qty: countInStock ? Number(countInStock) : 0,
+      stock_qty: countInStock !== undefined && countInStock !== '' ? Number(countInStock) : 0,
+      low_stock_threshold: low_stock_threshold !== undefined && low_stock_threshold !== '' ? Number(low_stock_threshold) : 10,
       supplier_id: supplier || null,
       image_url: image || '',
     });
@@ -59,19 +60,20 @@ export const createProduct = async (req, res) => {
 // @access  Private/Admin
 export const updateProduct = async (req, res) => {
   try {
-    const { name, brand, category, description, price, countInStock, supplier, image } = req.body;
+    const { name, brand, category, description, price, countInStock, supplier, image, low_stock_threshold } = req.body;
 
     const product = await Product.findById(req.params.id);
 
     if (product) {
-      product.name = name || product.name;
-      product.brand = brand || product.brand;
-      product.category = category || product.category;
-      product.description = description || product.description;
-      product.price = price !== undefined ? Number(price) : product.price;
-      product.stock_qty = countInStock !== undefined ? Number(countInStock) : product.stock_qty;
-      product.supplier_id = supplier || product.supplier_id;
-      product.image_url = image || product.image_url;
+      product.name = name !== undefined && name !== '' ? name : product.name;
+      product.brand = brand !== undefined ? brand : product.brand;
+      product.category = category !== undefined && category !== '' ? category : product.category;
+      product.description = description !== undefined && description !== '' ? description : product.description || 'No description provided';
+      product.price = price !== undefined && price !== '' ? Number(price) : product.price;
+      product.stock_qty = countInStock !== undefined && countInStock !== '' ? Number(countInStock) : product.stock_qty;
+      product.low_stock_threshold = low_stock_threshold !== undefined && low_stock_threshold !== '' ? Number(low_stock_threshold) : product.low_stock_threshold;
+      product.supplier_id = supplier !== undefined && supplier !== '' ? supplier : product.supplier_id;
+      product.image_url = image !== undefined ? image : product.image_url;
 
       const updatedProduct = await product.save();
       res.json(updatedProduct);

@@ -19,6 +19,7 @@ const AdminProductsPage = () => {
     description: '',
     price: '',
     countInStock: '',
+    low_stock_threshold: '',
     supplier: '',
     image: '',
   });
@@ -74,10 +75,10 @@ const AdminProductsPage = () => {
       fetchProducts();
       setShowForm(false);
       setEditId(null);
-      setFormData({ name: '', brand: '', category: '', description: '', price: '', countInStock: '', supplier: '', image: '' });
+      setFormData({ name: '', brand: '', category: '', description: '', price: '', countInStock: '', low_stock_threshold: '', supplier: '', image: '' });
     } catch (error) {
       console.error('Failed to save product', error);
-      alert('Failed to save product:\n' + (error.response?.data?.message || error.message));
+      alert('Failed to save product:\n' + (error.response?.data?.message || error.message) + '\n' + (error.response?.data?.error || ''));
     } finally {
       setCreating(false);
     }
@@ -92,6 +93,7 @@ const AdminProductsPage = () => {
       description: product.description || '',
       price: product.price || '',
       countInStock: product.stock_qty || product.countInStock || '',
+      low_stock_threshold: product.low_stock_threshold || '',
       supplier: product.supplier_id?._id || product.supplier_id || product.supplier || '',
       image: product.image_url || product.image || '',
     });
@@ -120,11 +122,11 @@ const AdminProductsPage = () => {
         {!showForm && (
           <button className="btn btn-primary" onClick={() => {
             setEditId(null);
-            setFormData({ name: '', brand: '', category: '', description: '', price: '', countInStock: '', supplier: '', image: '' });
+            setFormData({ name: '', brand: '', category: '', description: '', price: '', countInStock: '', low_stock_threshold: '', supplier: '', image: '' });
             setShowForm(true);
-          }} disabled={creating} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', padding: '10px 16px', borderRadius: '6px', border: 'none', backgroundColor: '#2563eb', color: '#fff' }}>
+          }} disabled={creating} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', padding: '10px 16px', borderRadius: '6px', border: '1px solid #000', backgroundColor: '#000', color: '#fff' }}>
             <Plus size={18} />
-            Create Product
+            <span style={{color: '#fff'}}>Create Product</span>
           </button>
         )}
       </div>
@@ -161,6 +163,10 @@ const AdminProductsPage = () => {
                 <input type="number" name="countInStock" value={formData.countInStock} onChange={handleInputChange} min="0" style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #cbd5e1', outline: 'none' }} placeholder="e.g. 100" />
               </div>
               <div>
+                <label style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem', fontWeight: '500', color: '#475569' }}>Low Stock Threshold</label>
+                <input type="number" name="low_stock_threshold" value={formData.low_stock_threshold} onChange={handleInputChange} min="0" style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #cbd5e1', outline: 'none' }} placeholder="e.g. 10" title="The system will alert you when stock falls below this number" />
+              </div>
+              <div>
                 <label style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem', fontWeight: '500', color: '#475569' }}>Supplier *</label>
                 <select name="supplier" value={formData.supplier} onChange={handleInputChange} required style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #cbd5e1', outline: 'none', backgroundColor: '#fff' }}>
                   <option value="">Select Supplier</option>
@@ -170,8 +176,15 @@ const AdminProductsPage = () => {
                 </select>
               </div>
               <div style={{ gridColumn: '1 / -1' }}>
-                <label style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem', fontWeight: '500', color: '#475569' }}>Image URL</label>
-                <input type="text" name="image" value={formData.image} onChange={handleInputChange} style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #cbd5e1', outline: 'none' }} placeholder="e.g. /images/mouse.jpg" />
+                <label style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem', fontWeight: '500', color: '#475569' }}>Web Image URL</label>
+                <input type="url" name="image" value={formData.image} onChange={handleInputChange} style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #cbd5e1', outline: 'none' }} placeholder="https://example.com/image.jpg" />
+                {formData.image && (
+                  <div style={{ marginTop: '10px' }}>
+                     <p style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '4px' }}>Image Preview:</p>
+                     <img src={formData.image} alt="Preview" style={{ height: '80px', width: '80px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #cbd5e1' }} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                     <p style={{ display: 'none', color: '#ef4444', fontSize: '0.75rem', margin: 0 }}>Invalid Image URL</p>
+                  </div>
+                )}
               </div>
               <div style={{ gridColumn: '1 / -1' }}>
                 <label style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem', fontWeight: '500', color: '#475569' }}>Description</label>

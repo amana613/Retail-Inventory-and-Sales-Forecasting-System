@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, Package, ShoppingCart, Truck, Activity } from 'lucide-react';
+import { LayoutDashboard, Users, Package, ShoppingCart, Truck, Activity, PackageOpen } from 'lucide-react';
 import './AdminSidebar.css';
 
 const AdminSidebar = () => {
@@ -8,6 +8,7 @@ const AdminSidebar = () => {
   const links = [
     { name: 'Dashboard', path: '/admin', icon: <LayoutDashboard size={20} /> },
     { name: 'Products', path: '/admin/products', icon: <Package size={20} /> },
+    { name: 'Restocking', path: '/admin/restock', icon: <PackageOpen size={20} /> },
     { name: 'Suppliers', path: '/admin/suppliers', icon: <Users size={20} /> },
     { name: 'Orders', path: '/admin/orders', icon: <ShoppingCart size={20} /> },
     { name: 'Deliveries', path: '/admin/deliveries', icon: <Truck size={20} /> },

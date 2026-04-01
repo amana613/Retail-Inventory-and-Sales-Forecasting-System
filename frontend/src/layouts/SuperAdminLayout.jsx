@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, UserPlus, Package, Truck, ShoppingBag, LogOut, Settings, ShieldAlert } from 'lucide-react';
+import { LayoutDashboard, Users, UserPlus, Package, Truck, ShoppingBag, LogOut, Settings, ShieldAlert, PackageOpen } from 'lucide-react';
 import './AdminLayout.css';
 
 const SuperAdminLayout = () => {
@@ -9,6 +9,7 @@ const SuperAdminLayout = () => {
     { name: 'S-Overview', path: '/superadmin', icon: <LayoutDashboard size={20} /> },
     { name: 'Manage Admins', path: '/superadmin/admins', icon: <ShieldAlert size={20} /> },
     { name: 'Products', path: '/superadmin/products', icon: <Package size={20} /> },
+    { name: 'Restocking', path: '/superadmin/restock', icon: <PackageOpen size={20} /> },
     { name: 'Suppliers', path: '/superadmin/suppliers', icon: <Users size={20} /> },
     { name: 'Orders', path: '/superadmin/orders', icon: <ShoppingBag size={20} /> },
     { name: 'Deliveries', path: '/superadmin/deliveries', icon: <Truck size={20} /> },

@@ -102,9 +102,9 @@ const AdminSuppliersPage = () => {
             setEditId(null);
             setFormData({ name: '', contactPerson: '', email: '', phone: '' });
             setShowForm(true);
-          }} disabled={creating} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', padding: '10px 16px', borderRadius: '6px', border: 'none', backgroundColor: '#2563eb', color: '#fff' }}>
+          }} disabled={creating} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', padding: '10px 16px', borderRadius: '6px', border: '1px solid #000', backgroundColor: '#000', color: '#fff' }}>
             <Plus size={18} />
-            Add Supplier
+            <span style={{color: '#fff'}}>Add Supplier</span>
           </button>
         )}
       </div>

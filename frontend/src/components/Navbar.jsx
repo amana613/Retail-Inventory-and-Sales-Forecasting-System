@@ -39,7 +39,7 @@ const Navbar = () => {
         {/* Brand / Logo */}
         <Link to="/" className="logo-section" style={{textDecoration: 'none'}}>
           <span style={{ color: 'var(--primary-red)', fontWeight: 800, fontSize: '1.8rem' }}>RETAIL</span>
-          <span style={{ color: 'var(--dark-ui)', fontWeight: 800, fontSize: '1.8rem' }}>PRO</span>
+          <span style={{ color: 'white', fontWeight: 800, fontSize: '1.8rem' }}>PRO</span>
         </Link>
 
         {/* Search Bar */}
@@ -112,12 +112,12 @@ const Navbar = () => {
           )}
 
           <Link to="/wishlist" className="action-btn icon-only" style={{ marginLeft: '15px' }}>
-            <Heart size={24} color="var(--dark-ui)" />
+            <Heart size={24} color="#fff" />
           </Link>
 
           {/* Cart Icon */}
           <Link to="/cart" className="action-btn cart-btn" style={{ marginLeft: '15px' }}>
-            <ShoppingCart size={24} color="var(--dark-ui)" />
+            <ShoppingCart size={24} color="#fff" />
             <span className="cart-badge">0</span>
           </Link>
         </div>

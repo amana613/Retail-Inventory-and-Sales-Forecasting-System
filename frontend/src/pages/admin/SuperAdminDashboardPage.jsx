@@ -130,6 +130,47 @@ const SuperAdminDashboardPage = () => {
           </ul>
         </div>
       </div>
+      
+      <div className="dashboard-tables-container" style={{ marginTop: '24px' }}>
+        <div className="card">
+          <div className="card-header">
+            <h3 style={{ color: '#ef4444', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Package size={18} /> Global Low Stock Alerts
+            </h3>
+          </div>
+          <div className="table-responsive">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Current Stock</th>
+                  <th>Threshold</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {dashboardData?.lowStockProducts?.map(product => (
+                  <tr key={product._id}>
+                    <td className="font-medium">{product.name}</td>
+                    <td style={{ color: product.stock_qty === 0 ? '#ef4444' : '#f59e0b', fontWeight: 'bold' }}>{product.stock_qty}</td>
+                    <td className="text-muted">{product.low_stock_threshold}</td>
+                    <td>
+                      <span className={`status-badge`} style={{ backgroundColor: product.stock_qty === 0 ? '#fee2e2' : '#fef3c7', color: product.stock_qty === 0 ? '#991b1b' : '#92400e', padding: '4px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: '600' }}>
+                        {product.stock_qty === 0 ? 'Out of Stock' : 'Low Stock'}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+                {(!dashboardData?.lowStockProducts || dashboardData.lowStockProducts.length === 0) && (
+                  <tr>
+                    <td colSpan="4" className="text-center py-4 text-muted">All products have sufficient stock globally.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

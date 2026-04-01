@@ -1,4 +1,5 @@
 import Order from '../models/Order.js';
+import Product from '../models/Product.js';
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -31,6 +32,16 @@ export const addOrderItems = async (req, res) => {
       });
 
       const createdOrder = await order.save();
+
+      // Update product stock quantities
+      for (const item of orderItems) {
+        const product = await Product.findById(item.product);
+        if (product) {
+          product.stock_qty = Math.max(0, product.stock_qty - item.qty);
+          await product.save();
+        }
+      }
+
       res.status(201).json(createdOrder);
     }
   } catch (error) {
@@ -43,7 +54,9 @@ export const addOrderItems = async (req, res) => {
 // @access  Private
 export const getOrderById = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id).populate('user', 'name email');
+    const order = await Order.findById(req.params.id)
+      .populate('user', 'name email')
+      .populate('rider', 'name email phone');
 
     if (order) {
       res.json(order);
@@ -60,7 +73,9 @@ export const getOrderById = async (req, res) => {
 // @access  Private
 export const getMyOrders = async (req, res) => {
   try {
-    const orders = await Order.find({ user: req.user._id });
+    const orders = await Order.find({ user: req.user._id })
+      .populate('user', 'id name')
+      .populate('rider', 'id name');
     res.json(orders);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -72,7 +87,13 @@ export const getMyOrders = async (req, res) => {
 // @access  Private/Admin
 export const getOrders = async (req, res) => {
   try {
-    const orders = await Order.find({}).populate('user', 'id name');
+    let query = {};
+    if (req.user.role === 'rider') {
+      query.rider = req.user._id;
+    }
+    const orders = await Order.find(query)
+      .populate('user', 'id name')
+      .populate('rider', 'id name');
     res.json(orders);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -81,15 +102,20 @@ export const getOrders = async (req, res) => {
 
 // @desc    Update order status
 // @route   PUT /api/orders/:id/deliver
-// @access  Private/Admin or Rider
+// @access  Private/Rider
 export const updateOrderToDelivered = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
 
     if (order) {
+      // Security check: Only riders can mark as delivered
+      if (req.user.role !== 'rider') {
+        return res.status(403).json({ message: 'Only delivery riders can mark orders as delivered.' });
+      }
+
       order.isDelivered = true;
       order.deliveredAt = Date.now();
-      order.status = 'Delivered';
+      order.status = 'delivered';
 
       const updatedOrder = await order.save();
       res.json(updatedOrder);
@@ -103,13 +129,23 @@ export const updateOrderToDelivered = async (req, res) => {
 
 // @desc    Update order status (Processing, Shipped, etc)
 // @route   PUT /api/orders/:id/status
-// @access  Private/Admin
+// @access  Private/Admin or Rider
 export const updateOrderStatus = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     const { status } = req.body;
 
     if (order) {
+      // Security check: Admins cannot update to in-transit or delivered via this route
+      if (req.user.role !== 'rider' && ['in-transit', 'delivered'].includes(status)) {
+        return res.status(403).json({ message: 'Admins can only update statuses up to dispatched. The rest are managed by the rider.' });
+      }
+
+      // Security check: Riders cannot revert or update to pre-dispatch statuses
+      if (req.user.role === 'rider' && ['pending', 'processing'].includes(status)) {
+        return res.status(403).json({ message: 'Riders can only manage statuses from dispatched onwards.' });
+      }
+
       order.status = status || order.status;
       
       // If status is delivered, set the order to delivered state

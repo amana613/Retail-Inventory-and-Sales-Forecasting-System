@@ -47,7 +47,7 @@ const ProductDetailsPage = () => {
 
       <div className="product-details-card">
         <div className="product-image-section">
-          <img src={product.image || 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800'} alt={product.name} className="main-product-image" />
+          <img src={product.image_url || product.image || 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800'} alt={product.name} className="main-product-image" />
         </div>
 
         <div className="product-info-section">
@@ -82,8 +82,8 @@ const ProductDetailsPage = () => {
               <span>Available for Fast Delivery</span>
             </div>
             <div className="meta-item">
-              <span className="stock-status" style={{ color: product.countInStock > 0 ? 'var(--color-success)' : 'var(--color-danger)' }}>
-                {product.countInStock > 0 ? `In Stock (${product.countInStock} available)` : 'Out of Stock'}
+              <span className="stock-status" style={{ color: product.stock_qty > 0 ? 'var(--color-success)' : 'var(--color-danger)' }}>
+                {product.stock_qty > 0 ? `In Stock (${product.stock_qty} available)` : 'Out of Stock'}
               </span>
             </div>
           </div>
@@ -93,7 +93,7 @@ const ProductDetailsPage = () => {
               <button onClick={() => setQty((prev) => Math.max(1, prev - 1))}>-</button>
               <input type="number" readOnly value={qty} />
               <button 
-                onClick={() => setQty((prev) => Math.min(product.countInStock, prev + 1))}
+                onClick={() => setQty((prev) => Math.min(product.stock_qty, prev + 1))}
               >
                 +
               </button>
@@ -101,7 +101,7 @@ const ProductDetailsPage = () => {
             
             <button 
               className="btn btn-primary add-to-cart-btn" 
-              disabled={product.countInStock === 0}
+              disabled={product.stock_qty === 0}
               onClick={addToCartHandler}
             >
               <ShoppingCart size={18} />
