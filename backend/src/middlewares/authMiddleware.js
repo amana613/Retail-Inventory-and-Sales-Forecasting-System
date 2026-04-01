@@ -13,22 +13,22 @@ const protect = async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       
       req.user = await User.findById(decoded.id).select('-password');
-      next();
+      return next();
     } catch (error) {
-      res.status(401).json({ message: 'Not authorized, token failed' });
+      return res.status(401).json({ message: 'Not authorized, token failed' });
     }
   }
 
   if (!token) {
-    res.status(401).json({ message: 'Not authorized, no token' });
+    return res.status(401).json({ message: 'Not authorized, no token' });
   }
 };
 
 const admin = (req, res, next) => {
-  if (req.user && req.user.role === 'admin') {
+  if (req.user && (req.user.role === 'admin' || req.user.role === 'superAdmin')) {
     next();
   } else {
-    res.status(401).json({ message: 'Not authorized as an admin' });
+    res.status(403).json({ message: 'Not authorized as an admin' });
   }
 };
 
@@ -36,8 +36,24 @@ const rider = (req, res, next) => {
   if (req.user && req.user.role === 'rider') {
     next();
   } else {
-    res.status(401).json({ message: 'Not authorized as a rider' });
+    res.status(403).json({ message: 'Not authorized as a rider' });
   }
 };
 
-export { protect, admin, rider };
+const superAdmin = (req, res, next) => {
+  if (req.user && req.user.role === 'superAdmin') {
+    next();
+  } else {
+    res.status(403).json({ message: 'Not authorized as a super admin' });
+  }
+};
+
+const adminOrRider = (req, res, next) => {
+  if (req.user && (req.user.role === 'admin' || req.user.role === 'superAdmin' || req.user.role === 'rider')) {
+    next();
+  } else {
+    res.status(403).json({ message: 'Not authorized for this operation' });
+  }
+};
+
+export { protect, admin, rider, superAdmin, adminOrRider };

@@ -4,6 +4,10 @@ import cors from 'cors';
 import morgan from 'morgan';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
+import productRoutes from './routes/productRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
+import supplierRoutes from './routes/supplierRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 dotenv.config();
 
@@ -16,6 +20,10 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 app.use('/api/users', authRoutes);
+app.use('/api/admins', userRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/suppliers', supplierRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');
