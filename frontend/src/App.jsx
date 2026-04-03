@@ -4,6 +4,7 @@ import StorefrontHomePage from './pages/StorefrontHomePage';
 import ShopPage from './pages/ShopPage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
 import CartPage from './pages/CartPage';
+import WishlistPage from './pages/WishlistPage';
 import ShippingPage from './pages/ShippingPage';
 import PaymentPage from './pages/PaymentPage';
 import PlaceOrderPage from './pages/PlaceOrderPage';
@@ -52,6 +53,7 @@ function App() {
           <Route path="product/:id" element={<ProductDetailsPage />} />
           <Route path="cart/:id?" element={<CartPage />} />
           <Route path="cart" element={<CartPage />} />
+          <Route path="wishlist" element={<WishlistPage />} />
           
           <Route element={<ProtectedRoute />}>
             <Route path="shipping" element={<ShippingPage />} />
@@ -86,6 +88,7 @@ function App() {
             <Route path="suppliers" element={<AdminSuppliersPage />} />
             <Route path="deliveries" element={<AdminDeliveriesPage />} />
             <Route path="settings" element={<AdminSettingsPage />} />
+            <Route path="admins" element={<SuperAdminAdminsPage />} />
             {/* Other admin routes to be added */}
           </Route>
         </Route>

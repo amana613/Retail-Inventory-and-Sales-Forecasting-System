@@ -17,7 +17,9 @@ const productSchema = new mongoose.Schema(
     },
     weight: { type: String }, // e.g. "600g", "1L"
     discount_percentage: { type: Number, default: 0 },
-    is_active: { type: Boolean, default: true }
+    is_active: { type: Boolean, default: true },
+    rating: { type: Number, default: 0 },
+    numReviews: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

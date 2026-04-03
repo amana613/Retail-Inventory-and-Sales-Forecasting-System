@@ -3,8 +3,10 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ShoppingCart, Heart, ArrowLeft, Star, Truck, Check, AlertCircle } from 'lucide-react';
 import { CartContext } from '../context/CartContext';
+import { WishlistContext } from '../context/WishlistContext';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import ReviewSection from '../components/ReviewSection';
 import './ProductDetailsPage.css';
 
 const ProductDetailsPage = () => {
@@ -14,8 +16,10 @@ const ProductDetailsPage = () => {
   const [product, setProduct] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [wishlistMessage, setWishlistMessage] = useState(null);
   
   const { addToCart } = useContext(CartContext);
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useContext(WishlistContext);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -36,8 +40,25 @@ const ProductDetailsPage = () => {
     navigate('/cart');
   };
 
+  const handleWishlistToggle = async () => {
+    try {
+      if (isInWishlist(product._id)) {
+        await removeFromWishlist(product._id);
+        setWishlistMessage('Removed from wishlist');
+      } else {
+        await addToWishlist(product);
+        setWishlistMessage('Added to wishlist');
+      }
+      setTimeout(() => setWishlistMessage(null), 2000);
+    } catch (err) {
+      setWishlistMessage(err instanceof Error ? err.message : 'Please login to use wishlist');
+    }
+  };
+
   if (loading) return <div style={{ height: '50vh', display: 'flex', alignItems: 'center' }}><Loader text="Loading product details..." /></div>;
   if (error) return <div className="container" style={{ padding: '2rem 0' }}><Message variant="danger">{error}</Message></div>;
+
+  const inWishlist = isInWishlist(product._id);
 
   return (
     <div className="product-details-container container">
@@ -107,12 +128,23 @@ const ProductDetailsPage = () => {
               <ShoppingCart size={18} />
               Add to Cart
             </button>
-            <button className="btn btn-outline wishlist-btn">
-              <Heart size={18} />
+            <button 
+              className="btn btn-outline wishlist-btn" 
+              onClick={handleWishlistToggle}
+              title={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+            >
+              <Heart size={18} fill={inWishlist ? 'currentColor' : 'none'} />
             </button>
+            {wishlistMessage && (
+              <p style={{ marginTop: '0.5rem', color: '#f59e0b', fontSize: '0.85rem' }}>
+                {wishlistMessage}
+              </p>
+            )}
           </div>
         </div>
       </div>
+
+      <ReviewSection productId={id} />
     </div>
   );
 };

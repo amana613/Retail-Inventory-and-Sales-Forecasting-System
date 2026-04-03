@@ -6,7 +6,11 @@ import bcrypt from 'bcryptjs';
 // @access  Private/SuperAdmin
 export const getUsers = async (req, res) => {
   try {
-    const users = await User.find({ role: { $in: ['admin', 'rider'] } }).select('-password');
+    const filter = req.user?.role === 'admin'
+      ? { role: 'rider' }
+      : { role: { $in: ['admin', 'rider'] } };
+
+    const users = await User.find(filter).select('-password');
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
@@ -32,6 +36,10 @@ export const createUser = async (req, res) => {
   const { name, email, password, role } = req.body;
 
   try {
+    if (req.user?.role === 'admin' && role && role !== 'rider') {
+      return res.status(403).json({ message: 'Admins can only create riders' });
+    }
+
     const userExists = await User.findOne({ email });
 
     if (userExists) {
@@ -45,7 +53,7 @@ export const createUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      role: role || 'admin',
+      role: req.user?.role === 'admin' ? 'rider' : (role || 'admin'),
     });
 
     if (user) {

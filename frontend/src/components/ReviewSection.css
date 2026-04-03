@@ -1,0 +1,267 @@
+.reviews-section {
+  margin-top: 3rem;
+  padding: 2rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.reviews-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  gap: 2rem;
+}
+
+.reviews-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.reviews-summary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avg-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background-color: white;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.rating-stars {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.rating-value {
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: #1e293b;
+}
+
+.review-count {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.review-form-container {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 6px;
+  margin-bottom: 2rem;
+  border: 1px solid #e2e8f0;
+}
+
+.already-reviewed {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #1e40af;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.btn-write-review {
+  width: 100%;
+  padding: 0.75rem 1rem;
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 0.95rem;
+}
+
+.rating-input {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.star-label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.star-label input {
+  display: none;
+}
+
+.star-label svg {
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.star-label:hover svg {
+  color: #f59e0b;
+  transform: scale(1.1);
+}
+
+.form-group textarea {
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+
+.form-group textarea:focus {
+  outline: none;
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-actions button {
+  flex: 1;
+}
+
+.login-prompt {
+  text-align: center;
+  color: #64748b;
+  padding: 1rem;
+  margin: 0;
+}
+
+.login-prompt a {
+  color: #f59e0b;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-prompt a:hover {
+  text-decoration: underline;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.no-reviews {
+  text-align: center;
+  color: #64748b;
+  padding: 2rem 1rem;
+  margin: 0;
+}
+
+.review-item {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 6px;
+  border-left: 3px solid #f59e0b;
+  position: relative;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  gap: 1rem;
+}
+
+.reviewer-info {
+  flex: 1;
+}
+
+.reviewer-name {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.review-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rating-badge {
+  background-color: #f59e0b;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.btn-delete-review {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.btn-delete-review:hover {
+  color: #dc2626;
+}
+
+.review-comment {
+  color: #334155;
+  margin: 0.75rem 0 0 0;
+  line-height: 1.5;
+}
+
+.review-date {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  margin: 0.5rem 0 0 0;
+}
+
+.reviews-section.loading {
+  text-align: center;
+  color: #64748b;
+  padding: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .reviews-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .rating-input {
+    flex-wrap: wrap;
+  }
+}

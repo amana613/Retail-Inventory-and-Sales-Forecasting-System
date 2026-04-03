@@ -8,8 +8,8 @@ router.route('/riders')
   .get(protect, admin, getRiders);
 
 router.route('/')
-  .get(protect, superAdmin, getUsers)
-  .post(protect, superAdmin, createUser);
+  .get(protect, admin, getUsers)
+  .post(protect, admin, createUser);
 
 router.route('/:id')
   .delete(protect, superAdmin, deleteUser);
