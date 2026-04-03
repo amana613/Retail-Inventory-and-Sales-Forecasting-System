@@ -1,15 +1,37 @@
-import React from 'react';
-import { Loader2 } from 'lucide-react';
+import React from "react";
+import { Loader2 } from "lucide-react";
 
-const Loader = ({ size = 40, color = 'var(--info-blue)', text = 'Loading...' }) => {
+const Loader = ({
+  size = 40,
+  color = "var(--info-blue)",
+  text = "Loading...",
+}) => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
-      <Loader2 
-        size={size} 
-        color={color} 
-        style={{ animation: 'spin 1s linear infinite' }} 
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "40px",
+      }}
+    >
+      <Loader2
+        size={size}
+        color={color}
+        style={{ animation: "spin 1s linear infinite" }}
       />
-      {text && <span style={{ marginTop: '10px', color: 'var(--text-muted)', fontSize: '0.9rem' }}>{text}</span>}
+      {text && (
+        <span
+          style={{
+            marginTop: "10px",
+            color: "var(--text-muted)",
+            fontSize: "0.9rem",
+          }}
+        >
+          {text}
+        </span>
+      )}
       <style>
         {`
           @keyframes spin {

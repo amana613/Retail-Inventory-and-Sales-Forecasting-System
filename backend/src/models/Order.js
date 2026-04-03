@@ -1,11 +1,11 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: 'User',
+      ref: "User",
     },
     orderItems: [
       {
@@ -16,7 +16,7 @@ const orderSchema = new mongoose.Schema(
         product: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,
-          ref: 'Product',
+          ref: "Product",
         },
       },
     ],
@@ -28,7 +28,7 @@ const orderSchema = new mongoose.Schema(
     paymentMethod: {
       type: String,
       required: true,
-      default: 'Card', // or COD
+      default: "Card", // or COD
     },
     itemsPrice: {
       type: Number,
@@ -63,12 +63,19 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['pending', 'processing', 'dispatched', 'in-transit', 'delivered', 'cancelled'],
-      default: 'pending',
+      enum: [
+        "pending",
+        "processing",
+        "dispatched",
+        "in-transit",
+        "delivered",
+        "cancelled",
+      ],
+      default: "pending",
     },
     rider: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
     },
     receiptImage: {
       type: String,
@@ -76,8 +83,8 @@ const orderSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-const Order = mongoose.model('Order', orderSchema);
+const Order = mongoose.model("Order", orderSchema);
 export default Order;

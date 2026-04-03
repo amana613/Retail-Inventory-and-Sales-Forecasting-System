@@ -1,22 +1,23 @@
-import Review from '../models/Review.js';
-import Product from '../models/Product.js';
+import Review from "../models/Review.js";
+import Product from "../models/Product.js";
 
 // Helper function to update product rating
 const updateProductRating = async (productId) => {
   try {
     const reviews = await Review.find({ product: productId });
     const numReviews = reviews.length;
-    const avgRating = numReviews > 0
-      ? reviews.reduce((sum, r) => sum + r.rating, 0) / numReviews
-      : 0;
+    const avgRating =
+      numReviews > 0
+        ? reviews.reduce((sum, r) => sum + r.rating, 0) / numReviews
+        : 0;
 
     await Product.findByIdAndUpdate(
       productId,
       { rating: avgRating, numReviews },
-      { new: true }
+      { new: true },
     );
   } catch (error) {
-    console.error('Error updating product rating:', error);
+    console.error("Error updating product rating:", error);
   }
 };
 
@@ -26,11 +27,11 @@ const updateProductRating = async (productId) => {
 export const getReviewsByProduct = async (req, res) => {
   try {
     const reviews = await Review.find({ product: req.params.productId })
-      .populate('user', 'name email')
+      .populate("user", "name email")
       .sort({ createdAt: -1 });
     res.json(reviews);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
 
@@ -43,17 +44,21 @@ export const createReview = async (req, res) => {
 
     // Validate input
     if (!productId || !rating) {
-      return res.status(400).json({ message: 'Product ID and rating are required' });
+      return res
+        .status(400)
+        .json({ message: "Product ID and rating are required" });
     }
 
     if (rating < 1 || rating > 5) {
-      return res.status(400).json({ message: 'Rating must be between 1 and 5' });
+      return res
+        .status(400)
+        .json({ message: "Rating must be between 1 and 5" });
     }
 
     // Check if product exists
     const product = await Product.findById(productId);
     if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
+      return res.status(404).json({ message: "Product not found" });
     }
 
     // Check if user already reviewed this product
@@ -63,7 +68,9 @@ export const createReview = async (req, res) => {
     });
 
     if (existingReview) {
-      return res.status(400).json({ message: 'You have already reviewed this product' });
+      return res
+        .status(400)
+        .json({ message: "You have already reviewed this product" });
     }
 
     // Create review
@@ -72,19 +79,21 @@ export const createReview = async (req, res) => {
       user: req.user._id,
       name: req.user.name,
       rating: Number(rating),
-      comment: comment || '',
+      comment: comment || "",
     });
 
     const createdReview = await review.save();
-    const populatedReview = await createdReview.populate('user', 'name email');
-    
+    const populatedReview = await createdReview.populate("user", "name email");
+
     // Update product rating
     await updateProductRating(productId);
-    
+
     res.status(201).json(populatedReview);
   } catch (error) {
-    console.error('Create Review Error:', error.message);
-    res.status(400).json({ message: 'Invalid review data', error: error.message });
+    console.error("Create Review Error:", error.message);
+    res
+      .status(400)
+      .json({ message: "Invalid review data", error: error.message });
   }
 };
 
@@ -96,23 +105,29 @@ export const deleteReview = async (req, res) => {
     const review = await Review.findById(req.params.id);
 
     if (!review) {
-      return res.status(404).json({ message: 'Review not found' });
+      return res.status(404).json({ message: "Review not found" });
     }
 
     // Check if user owns the review or is admin
-    if (review.user.toString() !== req.user._id.toString() && req.user.role !== 'admin' && req.user.role !== 'superAdmin') {
-      return res.status(403).json({ message: 'Not authorized to delete this review' });
+    if (
+      review.user.toString() !== req.user._id.toString() &&
+      req.user.role !== "admin" &&
+      req.user.role !== "superAdmin"
+    ) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized to delete this review" });
     }
 
     const productId = review.product;
     await Review.findByIdAndDelete(req.params.id);
-    
+
     // Update product rating
     await updateProductRating(productId);
-    
-    res.json({ message: 'Review removed' });
+
+    res.json({ message: "Review removed" });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
 
@@ -125,30 +140,34 @@ export const updateReview = async (req, res) => {
     const review = await Review.findById(req.params.id);
 
     if (!review) {
-      return res.status(404).json({ message: 'Review not found' });
+      return res.status(404).json({ message: "Review not found" });
     }
 
     // Check if user owns the review
     if (review.user.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: 'Not authorized to update this review' });
+      return res
+        .status(403)
+        .json({ message: "Not authorized to update this review" });
     }
 
     // Validate rating
     if (rating && (rating < 1 || rating > 5)) {
-      return res.status(400).json({ message: 'Rating must be between 1 and 5' });
+      return res
+        .status(400)
+        .json({ message: "Rating must be between 1 and 5" });
     }
 
     if (rating) review.rating = rating;
     if (comment !== undefined) review.comment = comment;
 
     const updatedReview = await review.save();
-    const populatedReview = await updatedReview.populate('user', 'name email');
-    
+    const populatedReview = await updatedReview.populate("user", "name email");
+
     // Update product rating
     await updateProductRating(review.product);
-    
+
     res.json(populatedReview);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };

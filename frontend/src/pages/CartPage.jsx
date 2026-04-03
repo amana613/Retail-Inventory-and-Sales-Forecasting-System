@@ -1,9 +1,9 @@
-import { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Trash2, ArrowRight } from 'lucide-react';
-import { CartContext } from '../context/CartContext';
-import AuthContext from '../context/AuthContext';
-import './CartPage.css';
+import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Trash2, ArrowRight } from "lucide-react";
+import { CartContext } from "../context/CartContext";
+import AuthContext from "../context/AuthContext";
+import "./CartPage.css";
 
 const CartPage = () => {
   const { cartItems, removeFromCart, addToCart } = useContext(CartContext);
@@ -12,9 +12,9 @@ const CartPage = () => {
 
   const checkoutHandler = () => {
     if (user) {
-      navigate('/shipping');
+      navigate("/shipping");
     } else {
-      navigate('/login?redirect=/shipping');
+      navigate("/login?redirect=/shipping");
     }
   };
 
@@ -23,7 +23,10 @@ const CartPage = () => {
       <h2>Shopping Cart</h2>
       {cartItems.length === 0 ? (
         <div className="empty-message">
-          Your cart is empty <Link to="/" className="text-primary">Go Back</Link>
+          Your cart is empty{" "}
+          <Link to="/" className="text-primary">
+            Go Back
+          </Link>
         </div>
       ) : (
         <div className="cart-content">
@@ -41,7 +44,10 @@ const CartPage = () => {
                   <select
                     value={item.qty}
                     onChange={(e) =>
-                      addToCart({ _id: item.product, ...item }, Number(e.target.value))
+                      addToCart(
+                        { _id: item.product, ...item },
+                        Number(e.target.value),
+                      )
                     }
                   >
                     {[...Array(item.countInStock).keys()].map((x) => (
@@ -64,10 +70,15 @@ const CartPage = () => {
           <div className="cart-summary">
             <div className="summary-card">
               <h3>
-                Subtotal ({cartItems.reduce((acc, item) => acc + Number(item.qty), 0)}) items
+                Subtotal (
+                {cartItems.reduce((acc, item) => acc + Number(item.qty), 0)})
+                items
               </h3>
               <p className="summary-total">
-                Rs. {cartItems.reduce((acc, item) => acc + item.qty * item.price, 0).toFixed(2)}
+                Rs.{" "}
+                {cartItems
+                  .reduce((acc, item) => acc + item.qty * item.price, 0)
+                  .toFixed(2)}
               </p>
               <button
                 fullWidth

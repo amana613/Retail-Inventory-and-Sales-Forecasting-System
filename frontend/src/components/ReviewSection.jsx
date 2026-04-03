@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-import { Star, Trash2, AlertCircle } from 'lucide-react';
-import { AuthContext } from '../context/AuthContext';
-import Message from './Message';
-import './ReviewSection.css';
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { Star, Trash2, AlertCircle } from "lucide-react";
+import { AuthContext } from "../context/AuthContext";
+import Message from "./Message";
+import "./ReviewSection.css";
 
 const ReviewSection = ({ productId, onReviewAdded }) => {
   const { user } = useContext(AuthContext);
@@ -11,10 +11,10 @@ const ReviewSection = ({ productId, onReviewAdded }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
-  
+
   const [formData, setFormData] = useState({
     rating: 5,
-    comment: '',
+    comment: "",
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
@@ -32,7 +32,7 @@ const ReviewSection = ({ productId, onReviewAdded }) => {
       setReviews(data);
       setError(null);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to load reviews');
+      setError(err.response?.data?.message || "Failed to load reviews");
       setReviews([]);
     } finally {
       setLoading(false);
@@ -47,46 +47,46 @@ const ReviewSection = ({ productId, onReviewAdded }) => {
     try {
       const config = {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${user?.token}`,
         },
       };
 
       const { data } = await axios.post(
-        '/api/reviews',
+        "/api/reviews",
         {
           productId,
           rating: formData.rating,
           comment: formData.comment,
         },
-        config
+        config,
       );
 
       setReviews([data, ...reviews]);
-      setFormData({ rating: 5, comment: '' });
+      setFormData({ rating: 5, comment: "" });
       setShowForm(false);
       setSubmitSuccess(true);
       setTimeout(() => setSubmitSuccess(false), 3000);
-      
+
       if (onReviewAdded) onReviewAdded();
     } catch (err) {
-      setSubmitError(err.response?.data?.message || 'Failed to submit review');
+      setSubmitError(err.response?.data?.message || "Failed to submit review");
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleDeleteReview = async (reviewId) => {
-    if (!window.confirm('Are you sure you want to delete this review?')) return;
+    if (!window.confirm("Are you sure you want to delete this review?")) return;
 
     try {
       const config = {
         headers: { Authorization: `Bearer ${user?.token}` },
       };
       await axios.delete(`/api/reviews/${reviewId}`, config);
-      setReviews(reviews.filter(r => r._id !== reviewId));
+      setReviews(reviews.filter((r) => r._id !== reviewId));
     } catch (err) {
-      alert(err.response?.data?.message || 'Failed to delete review');
+      alert(err.response?.data?.message || "Failed to delete review");
     }
   };
 
@@ -94,11 +94,14 @@ const ReviewSection = ({ productId, onReviewAdded }) => {
     return <div className="reviews-section loading">Loading reviews...</div>;
   }
 
-  const avgRating = reviews.length > 0
-    ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
-    : 0;
+  const avgRating =
+    reviews.length > 0
+      ? (
+          reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+        ).toFixed(1)
+      : 0;
 
-  const userHasReviewed = reviews.some(r => r.user?._id === user?._id);
+  const userHasReviewed = reviews.some((r) => r.user?._id === user?._id);
 
   return (
     <div className="reviews-section">
@@ -111,13 +114,21 @@ const ReviewSection = ({ productId, onReviewAdded }) => {
                 <Star
                   key={i}
                   size={16}
-                  fill={i < Math.floor(parseFloat(avgRating)) ? '#f59e0b' : 'none'}
-                  color={i < Math.floor(parseFloat(avgRating)) ? '#f59e0b' : '#CBD5E1'}
+                  fill={
+                    i < Math.floor(parseFloat(avgRating)) ? "#f59e0b" : "none"
+                  }
+                  color={
+                    i < Math.floor(parseFloat(avgRating))
+                      ? "#f59e0b"
+                      : "#CBD5E1"
+                  }
                 />
               ))}
             </div>
             <span className="rating-value">{avgRating}</span>
-            <span className="review-count">({reviews.length} {reviews.length === 1 ? 'review' : 'reviews'})</span>
+            <span className="review-count">
+              ({reviews.length} {reviews.length === 1 ? "review" : "reviews"})
+            </span>
           </div>
         </div>
       </div>
@@ -126,9 +137,7 @@ const ReviewSection = ({ productId, onReviewAdded }) => {
         <Message variant="success">Review submitted successfully!</Message>
       )}
 
-      {submitError && (
-        <Message variant="danger">{submitError}</Message>
-      )}
+      {submitError && <Message variant="danger">{submitError}</Message>}
 
       {error && <Message variant="warning">{error}</Message>}
 
@@ -160,12 +169,19 @@ const ReviewSection = ({ productId, onReviewAdded }) => {
                             name="rating"
                             value={star}
                             checked={formData.rating === star}
-                            onChange={(e) => setFormData({ ...formData, rating: e.target.value })}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                rating: e.target.value,
+                              })
+                            }
                           />
                           <Star
                             size={24}
-                            fill={formData.rating >= star ? '#f59e0b' : 'none'}
-                            color={formData.rating >= star ? '#f59e0b' : '#CBD5E1'}
+                            fill={formData.rating >= star ? "#f59e0b" : "none"}
+                            color={
+                              formData.rating >= star ? "#f59e0b" : "#CBD5E1"
+                            }
                           />
                         </label>
                       ))}
@@ -176,7 +192,9 @@ const ReviewSection = ({ productId, onReviewAdded }) => {
                     <label>Comment (Optional)</label>
                     <textarea
                       value={formData.comment}
-                      onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, comment: e.target.value })
+                      }
                       placeholder="Share your experience with this product..."
                       rows={4}
                     />
@@ -188,7 +206,7 @@ const ReviewSection = ({ productId, onReviewAdded }) => {
                       className="btn btn-primary"
                       disabled={submitting}
                     >
-                      {submitting ? 'Submitting...' : 'Submit Review'}
+                      {submitting ? "Submitting..." : "Submit Review"}
                     </button>
                     <button
                       type="button"
@@ -224,8 +242,8 @@ const ReviewSection = ({ productId, onReviewAdded }) => {
                       <Star
                         key={i}
                         size={14}
-                        fill={i < review.rating ? '#f59e0b' : 'none'}
-                        color={i < review.rating ? '#f59e0b' : '#CBD5E1'}
+                        fill={i < review.rating ? "#f59e0b" : "none"}
+                        color={i < review.rating ? "#f59e0b" : "#CBD5E1"}
                       />
                     ))}
                     <span className="rating-badge">{review.rating}.0</span>
@@ -241,7 +259,9 @@ const ReviewSection = ({ productId, onReviewAdded }) => {
                   </button>
                 )}
               </div>
-              {review.comment && <p className="review-comment">{review.comment}</p>}
+              {review.comment && (
+                <p className="review-comment">{review.comment}</p>
+              )}
               <p className="review-date">
                 {new Date(review.createdAt).toLocaleDateString()}
               </p>

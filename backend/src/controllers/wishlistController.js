@@ -1,12 +1,14 @@
-import Wishlist from '../models/Wishlist.js';
-import Product from '../models/Product.js';
+import Wishlist from "../models/Wishlist.js";
+import Product from "../models/Product.js";
 
 // @desc    Get user's wishlist
 // @route   GET /api/wishlist
 // @access  Private
 export const getWishlist = async (req, res) => {
   try {
-    let wishlist = await Wishlist.findOne({ user: req.user._id }).populate('products');
+    let wishlist = await Wishlist.findOne({ user: req.user._id }).populate(
+      "products",
+    );
 
     if (!wishlist) {
       // Create empty wishlist if it doesn't exist
@@ -15,7 +17,7 @@ export const getWishlist = async (req, res) => {
 
     res.json(wishlist);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
 
@@ -27,13 +29,13 @@ export const addToWishlist = async (req, res) => {
     const { productId } = req.body;
 
     if (!productId) {
-      return res.status(400).json({ message: 'Product ID is required' });
+      return res.status(400).json({ message: "Product ID is required" });
     }
 
     // Check if product exists
     const product = await Product.findById(productId);
     if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
+      return res.status(404).json({ message: "Product not found" });
     }
 
     let wishlist = await Wishlist.findOne({ user: req.user._id });
@@ -47,16 +49,16 @@ export const addToWishlist = async (req, res) => {
     } else {
       // Check if product already in wishlist
       if (wishlist.products.includes(productId)) {
-        return res.status(400).json({ message: 'Product already in wishlist' });
+        return res.status(400).json({ message: "Product already in wishlist" });
       }
       wishlist.products.push(productId);
     }
 
     await wishlist.save();
-    const populatedWishlist = await wishlist.populate('products');
+    const populatedWishlist = await wishlist.populate("products");
     res.status(201).json(populatedWishlist);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
 
@@ -70,18 +72,18 @@ export const removeFromWishlist = async (req, res) => {
     const wishlist = await Wishlist.findOne({ user: req.user._id });
 
     if (!wishlist) {
-      return res.status(404).json({ message: 'Wishlist not found' });
+      return res.status(404).json({ message: "Wishlist not found" });
     }
 
     wishlist.products = wishlist.products.filter(
-      (id) => id.toString() !== productId
+      (id) => id.toString() !== productId,
     );
 
     await wishlist.save();
-    const populatedWishlist = await wishlist.populate('products');
+    const populatedWishlist = await wishlist.populate("products");
     res.json(populatedWishlist);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
 
@@ -101,7 +103,7 @@ export const checkWishlist = async (req, res) => {
     const inWishlist = wishlist.products.includes(productId);
     res.json({ inWishlist });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
 
@@ -113,14 +115,14 @@ export const clearWishlist = async (req, res) => {
     const wishlist = await Wishlist.findOne({ user: req.user._id });
 
     if (!wishlist) {
-      return res.status(404).json({ message: 'Wishlist not found' });
+      return res.status(404).json({ message: "Wishlist not found" });
     }
 
     wishlist.products = [];
     await wishlist.save();
 
-    res.json({ message: 'Wishlist cleared', wishlist });
+    res.json({ message: "Wishlist cleared", wishlist });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };

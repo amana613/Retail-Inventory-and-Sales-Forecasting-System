@@ -1,24 +1,24 @@
-import { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { CartContext } from '../context/CartContext';
-import CheckoutSteps from '../components/CheckoutSteps';
-import { CreditCard } from 'lucide-react';
-import './AuthPage.css';
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { CartContext } from "../context/CartContext";
+import CheckoutSteps from "../components/CheckoutSteps";
+import { CreditCard } from "lucide-react";
+import "./AuthPage.css";
 
 const PaymentPage = () => {
   const { shippingAddress, savePaymentMethod } = useContext(CartContext);
   const navigate = useNavigate();
 
   if (!shippingAddress.address) {
-    navigate('/shipping');
+    navigate("/shipping");
   }
 
-  const [paymentMethod, setPaymentMethod] = useState('Credit Card');
+  const [paymentMethod, setPaymentMethod] = useState("Credit Card");
 
   const submitHandler = (e) => {
     e.preventDefault();
     savePaymentMethod(paymentMethod);
-    navigate('/placeorder');
+    navigate("/placeorder");
   };
 
   return (
@@ -38,7 +38,7 @@ const PaymentPage = () => {
                   type="radio"
                   name="paymentMethod"
                   value="Credit Card"
-                  checked={paymentMethod === 'Credit Card'}
+                  checked={paymentMethod === "Credit Card"}
                   onChange={(e) => setPaymentMethod(e.target.value)}
                 />
                 <span className="radio-label">
@@ -52,7 +52,7 @@ const PaymentPage = () => {
                   type="radio"
                   name="paymentMethod"
                   value="Cash On Delivery"
-                  checked={paymentMethod === 'Cash On Delivery'}
+                  checked={paymentMethod === "Cash On Delivery"}
                   onChange={(e) => setPaymentMethod(e.target.value)}
                 />
                 <span className="radio-label">Cash On Delivery</span>
@@ -60,7 +60,10 @@ const PaymentPage = () => {
             </div>
           </div>
 
-          <button type="submit" className="btn btn-primary btn-block auth-btn mt-4">
+          <button
+            type="submit"
+            className="btn btn-primary btn-block auth-btn mt-4"
+          >
             Continue To Review
           </button>
         </form>

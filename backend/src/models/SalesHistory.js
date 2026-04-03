@@ -1,11 +1,11 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const salesHistorySchema = new mongoose.Schema(
   {
     product: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: 'Product',
+      ref: "Product",
     },
     date: {
       type: Date,
@@ -22,8 +22,8 @@ const salesHistorySchema = new mongoose.Schema(
       default: 0.0,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-const SalesHistory = mongoose.model('SalesHistory', salesHistorySchema);
+const SalesHistory = mongoose.model("SalesHistory", salesHistorySchema);
 export default SalesHistory;

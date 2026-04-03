@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const supplierSchema = new mongoose.Schema(
   {
@@ -8,8 +8,8 @@ const supplierSchema = new mongoose.Schema(
     phone: { type: String, required: true },
     address: { type: String },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-const Supplier = mongoose.model('Supplier', supplierSchema);
+const Supplier = mongoose.model("Supplier", supplierSchema);
 export default Supplier;

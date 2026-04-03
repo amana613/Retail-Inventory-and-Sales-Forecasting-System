@@ -1,4 +1,4 @@
-import Supplier from '../models/Supplier.js';
+import Supplier from "../models/Supplier.js";
 
 // @desc    Fetch all suppliers
 // @route   GET /api/suppliers
@@ -8,7 +8,7 @@ export const getSuppliers = async (req, res) => {
     const suppliers = await Supplier.find({});
     res.json(suppliers);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: "Server Error" });
   }
 };
 
@@ -23,7 +23,7 @@ export const createSupplier = async (req, res) => {
 
     if (supplierExists) {
       res.status(400);
-      throw new Error('Supplier already exists');
+      throw new Error("Supplier already exists");
     }
 
     const supplier = await Supplier.create({
@@ -38,7 +38,7 @@ export const createSupplier = async (req, res) => {
       res.status(201).json(supplier);
     } else {
       res.status(400);
-      throw new Error('Invalid supplier data');
+      throw new Error("Invalid supplier data");
     }
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -63,7 +63,7 @@ export const updateSupplier = async (req, res) => {
       const updatedSupplier = await supplier.save();
       res.json(updatedSupplier);
     } else {
-      res.status(404).json({ message: 'Supplier not found' });
+      res.status(404).json({ message: "Supplier not found" });
     }
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -79,10 +79,10 @@ export const getSupplierById = async (req, res) => {
     if (supplier) {
       res.json(supplier);
     } else {
-      res.status(404).json({ message: 'Supplier not found' });
+      res.status(404).json({ message: "Supplier not found" });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: "Server Error" });
   }
 };
 // @route   DELETE /api/suppliers/:id
@@ -92,11 +92,11 @@ export const deleteSupplier = async (req, res) => {
     const supplier = await Supplier.findById(req.params.id);
     if (supplier) {
       await supplier.deleteOne();
-      res.json({ message: 'Supplier removed' });
+      res.json({ message: "Supplier removed" });
     } else {
-      res.status(404).json({ message: 'Supplier not found' });
+      res.status(404).json({ message: "Supplier not found" });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: "Server Error" });
   }
 };

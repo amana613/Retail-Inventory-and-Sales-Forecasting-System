@@ -1,0 +1,46 @@
+# Common
+.DS_Store
+.env
+*.log
+
+# Node & JS
+node_modules/
+dist/
+dist-ssr/
+build/
+.next/
+out/
+coverage/
+
+# Python & ML
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+env.bak/
+venv.bak/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# IDEs
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+
+# Backend Specific
+backend/uploads/
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini

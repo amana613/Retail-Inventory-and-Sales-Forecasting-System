@@ -1,6 +1,6 @@
-import { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-import { AuthContext } from './AuthContext';
+import { createContext, useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { AuthContext } from "./AuthContext";
 
 export const WishlistContext = createContext();
 
@@ -24,10 +24,10 @@ export const WishlistProvider = ({ children }) => {
       const config = {
         headers: { Authorization: `Bearer ${user?.token}` },
       };
-      const { data } = await axios.get('/api/wishlist', config);
+      const { data } = await axios.get("/api/wishlist", config);
       setWishlistItems(data.products || []);
     } catch (error) {
-      console.error('Failed to fetch wishlist:', error);
+      console.error("Failed to fetch wishlist:", error);
       setWishlistItems([]);
     } finally {
       setLoading(false);
@@ -36,35 +36,42 @@ export const WishlistProvider = ({ children }) => {
 
   const addToWishlist = async (product) => {
     if (!user?.token) {
-      throw new Error('Please login to add items to wishlist');
+      throw new Error("Please login to add items to wishlist");
     }
 
     try {
       const config = {
         headers: { Authorization: `Bearer ${user?.token}` },
       };
-      const { data } = await axios.post('/api/wishlist/add', { productId: product._id }, config);
+      const { data } = await axios.post(
+        "/api/wishlist/add",
+        { productId: product._id },
+        config,
+      );
       setWishlistItems(data.products || []);
       return true;
     } catch (error) {
-      throw error.response?.data?.message || 'Failed to add to wishlist';
+      throw error.response?.data?.message || "Failed to add to wishlist";
     }
   };
 
   const removeFromWishlist = async (productId) => {
     if (!user?.token) {
-      throw new Error('Please login to remove items from wishlist');
+      throw new Error("Please login to remove items from wishlist");
     }
 
     try {
       const config = {
         headers: { Authorization: `Bearer ${user?.token}` },
       };
-      const { data } = await axios.delete(`/api/wishlist/remove/${productId}`, config);
+      const { data } = await axios.delete(
+        `/api/wishlist/remove/${productId}`,
+        config,
+      );
       setWishlistItems(data.products || []);
       return true;
     } catch (error) {
-      throw error.response?.data?.message || 'Failed to remove from wishlist';
+      throw error.response?.data?.message || "Failed to remove from wishlist";
     }
   };
 
@@ -74,18 +81,18 @@ export const WishlistProvider = ({ children }) => {
 
   const clearWishlist = async () => {
     if (!user?.token) {
-      throw new Error('Please login to clear wishlist');
+      throw new Error("Please login to clear wishlist");
     }
 
     try {
       const config = {
         headers: { Authorization: `Bearer ${user?.token}` },
       };
-      await axios.delete('/api/wishlist/clear', config);
+      await axios.delete("/api/wishlist/clear", config);
       setWishlistItems([]);
       return true;
     } catch (error) {
-      throw error.response?.data?.message || 'Failed to clear wishlist';
+      throw error.response?.data?.message || "Failed to clear wishlist";
     }
   };
 

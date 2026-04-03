@@ -147,22 +147,38 @@
 
 .stat-card:nth-child(1) {
   border-left-color: #3b82f6;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, transparent 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.05) 0%,
+    transparent 100%
+  );
 }
 
 .stat-card:nth-child(2) {
   border-left-color: #10b981;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.05) 0%,
+    transparent 100%
+  );
 }
 
 .stat-card:nth-child(3) {
   border-left-color: #8b5cf6;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, transparent 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.05) 0%,
+    transparent 100%
+  );
 }
 
 .stat-card:nth-child(4) {
   border-left-color: #f59e0b;
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, transparent 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.05) 0%,
+    transparent 100%
+  );
 }
 
 .stat-value {

@@ -1,19 +1,20 @@
-import User from '../models/User.js';
-import bcrypt from 'bcryptjs';
+import User from "../models/User.js";
+import bcrypt from "bcryptjs";
 
 // @desc    Get all users (admins) for super admin
 // @route   GET /api/users
 // @access  Private/SuperAdmin
 export const getUsers = async (req, res) => {
   try {
-    const filter = req.user?.role === 'admin'
-      ? { role: 'rider' }
-      : { role: { $in: ['admin', 'rider'] } };
+    const filter =
+      req.user?.role === "admin"
+        ? { role: "rider" }
+        : { role: { $in: ["admin", "rider"] } };
 
-    const users = await User.find(filter).select('-password');
+    const users = await User.find(filter).select("-password");
     res.json(users);
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
@@ -22,10 +23,10 @@ export const getUsers = async (req, res) => {
 // @access  Private/Admin
 export const getRiders = async (req, res) => {
   try {
-    const riders = await User.find({ role: 'rider' }).select('-password');
+    const riders = await User.find({ role: "rider" }).select("-password");
     res.json(riders);
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
@@ -36,14 +37,14 @@ export const createUser = async (req, res) => {
   const { name, email, password, role } = req.body;
 
   try {
-    if (req.user?.role === 'admin' && role && role !== 'rider') {
-      return res.status(403).json({ message: 'Admins can only create riders' });
+    if (req.user?.role === "admin" && role && role !== "rider") {
+      return res.status(403).json({ message: "Admins can only create riders" });
     }
 
     const userExists = await User.findOne({ email });
 
     if (userExists) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: "User already exists" });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -53,7 +54,7 @@ export const createUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      role: req.user?.role === 'admin' ? 'rider' : (role || 'admin'),
+      role: req.user?.role === "admin" ? "rider" : role || "admin",
     });
 
     if (user) {
@@ -64,10 +65,10 @@ export const createUser = async (req, res) => {
         role: user.role,
       });
     } else {
-      res.status(400).json({ message: 'Invalid user data' });
+      res.status(400).json({ message: "Invalid user data" });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
@@ -79,15 +80,15 @@ export const deleteUser = async (req, res) => {
     const user = await User.findById(req.params.id);
 
     if (user) {
-      if (user.role === 'superAdmin') {
-        return res.status(400).json({ message: 'Cannot delete super admin' });
+      if (user.role === "superAdmin") {
+        return res.status(400).json({ message: "Cannot delete super admin" });
       }
       await User.findByIdAndDelete(req.params.id);
-      res.json({ message: 'User removed' });
+      res.json({ message: "User removed" });
     } else {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: "User not found" });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };

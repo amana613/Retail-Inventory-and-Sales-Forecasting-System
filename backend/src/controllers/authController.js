@@ -1,6 +1,6 @@
-import User from '../models/User.js';
-import generateToken from '../utils/generateToken.js';
-import bcrypt from 'bcryptjs';
+import User from "../models/User.js";
+import generateToken from "../utils/generateToken.js";
+import bcrypt from "bcryptjs";
 
 const matchPassword = async (enteredPassword, hashedPassword) => {
   return await bcrypt.compare(enteredPassword, hashedPassword);
@@ -23,7 +23,7 @@ const authUser = async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(401).json({ message: 'Invalid email or password' });
+    res.status(401).json({ message: "Invalid email or password" });
   }
 };
 
@@ -36,7 +36,7 @@ const registerUser = async (req, res) => {
   const userExists = await User.findOne({ email });
 
   if (userExists) {
-    res.status(400).json({ message: 'User already exists' });
+    res.status(400).json({ message: "User already exists" });
     return;
   }
 
@@ -47,7 +47,7 @@ const registerUser = async (req, res) => {
     name,
     email,
     password: hashedPassword,
-    role: role || 'customer',
+    role: role || "customer",
   });
 
   if (user) {
@@ -59,7 +59,7 @@ const registerUser = async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(400).json({ message: 'Invalid user data' });
+    res.status(400).json({ message: "Invalid user data" });
   }
 };
 
@@ -76,10 +76,10 @@ const getUserProfile = async (req, res) => {
       email: user.email,
       role: user.role,
       phone: user.phone,
-      address: user.address
+      address: user.address,
     });
   } else {
-    res.status(404).json({ message: 'User not found' });
+    res.status(404).json({ message: "User not found" });
   }
 };
 
@@ -112,7 +112,7 @@ const updateUserProfile = async (req, res) => {
       token: generateToken(updatedUser._id),
     });
   } else {
-    res.status(404).json({ message: 'User not found' });
+    res.status(404).json({ message: "User not found" });
   }
 };
 
@@ -131,14 +131,23 @@ const deleteUser = async (req, res) => {
   const user = await User.findById(req.params.id);
 
   if (user) {
-    if (user.role === 'superAdmin') {
-      return res.status(400).json({ message: 'Cannot delete super admin from here' });
+    if (user.role === "superAdmin") {
+      return res
+        .status(400)
+        .json({ message: "Cannot delete super admin from here" });
     }
     await User.findByIdAndDelete(req.params.id);
-    res.json({ message: 'User removed' });
+    res.json({ message: "User removed" });
   } else {
-    res.status(404).json({ message: 'User not found' });
+    res.status(404).json({ message: "User not found" });
   }
 };
 
-export { authUser, registerUser, getUserProfile, updateUserProfile, getUsers, deleteUser };
+export {
+  authUser,
+  registerUser,
+  getUserProfile,
+  updateUserProfile,
+  getUsers,
+  deleteUser,
+};

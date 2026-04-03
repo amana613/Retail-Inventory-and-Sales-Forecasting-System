@@ -1,17 +1,17 @@
-import React, { useEffect } from 'react';
-import { X } from 'lucide-react';
-import './Modal.css';
+import React, { useEffect } from "react";
+import { X } from "lucide-react";
+import "./Modal.css";
 
 const Modal = ({ isOpen, onClose, title, children }) => {
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
@@ -26,9 +26,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
             <X size={20} />
           </button>
         </div>
-        <div className="modal-content">
-          {children}
-        </div>
+        <div className="modal-content">{children}</div>
       </div>
     </div>
   );

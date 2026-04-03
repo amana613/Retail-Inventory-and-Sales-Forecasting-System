@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
-import StatusBadge from '../components/StatusBadge';
-import { Calendar, Filter, TrendingUp } from 'lucide-react';
-import './MyOrdersPage.css';
+import React, { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
+import StatusBadge from "../components/StatusBadge";
+import { Calendar, Filter, TrendingUp } from "lucide-react";
+import "./MyOrdersPage.css";
 
 const MyOrdersPage = () => {
   const { user } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filterType, setFilterType] = useState('all');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [filterType, setFilterType] = useState("all");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [groupByMonth, setGroupByMonth] = useState(false);
 
   useEffect(() => {
@@ -22,10 +22,14 @@ const MyOrdersPage = () => {
         const config = {
           headers: { Authorization: `Bearer ${user.token}` },
         };
-        const { data } = await axios.get('/api/orders/myorders', config);
-        setOrders(Array.isArray(data) ? data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) : []);
+        const { data } = await axios.get("/api/orders/myorders", config);
+        setOrders(
+          Array.isArray(data)
+            ? data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            : [],
+        );
       } catch (error) {
-        console.error('Failed to fetch user orders', error);
+        console.error("Failed to fetch user orders", error);
       } finally {
         setLoading(false);
       }
@@ -42,38 +46,36 @@ const MyOrdersPage = () => {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
     switch (filterType) {
-      case 'today':
+      case "today":
         filtered = filtered.filter(
           (order) =>
-            new Date(order.createdAt).toDateString() === today.toDateString()
+            new Date(order.createdAt).toDateString() === today.toDateString(),
         );
         break;
-      case 'week':
+      case "week":
         const weekAgo = new Date(today);
         weekAgo.setDate(weekAgo.getDate() - 7);
         filtered = filtered.filter(
-          (order) => new Date(order.createdAt) >= weekAgo
+          (order) => new Date(order.createdAt) >= weekAgo,
         );
         break;
-      case 'month':
+      case "month":
         const monthAgo = new Date(today);
         monthAgo.setMonth(monthAgo.getMonth() - 1);
         filtered = filtered.filter(
-          (order) => new Date(order.createdAt) >= monthAgo
+          (order) => new Date(order.createdAt) >= monthAgo,
         );
         break;
-      case 'lastMonth':
+      case "lastMonth":
         const currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
         const lastMonth = new Date(currentMonth);
         lastMonth.setMonth(lastMonth.getMonth() - 1);
         filtered = filtered.filter((order) => {
           const orderDate = new Date(order.createdAt);
-          return (
-            orderDate >= lastMonth && orderDate < currentMonth
-          );
+          return orderDate >= lastMonth && orderDate < currentMonth;
         });
         break;
-      case 'custom':
+      case "custom":
         if (startDate && endDate) {
           const start = new Date(startDate);
           const end = new Date(endDate);
@@ -81,7 +83,7 @@ const MyOrdersPage = () => {
           filtered = filtered.filter(
             (order) =>
               new Date(order.createdAt) >= start &&
-              new Date(order.createdAt) <= end
+              new Date(order.createdAt) <= end,
           );
         }
         break;
@@ -97,9 +99,9 @@ const MyOrdersPage = () => {
     const grouped = {};
     filteredOrders.forEach((order) => {
       const date = new Date(order.createdAt);
-      const monthKey = date.toLocaleString('default', {
-        year: 'numeric',
-        month: 'long',
+      const monthKey = date.toLocaleString("default", {
+        year: "numeric",
+        month: "long",
       });
       if (!grouped[monthKey]) {
         grouped[monthKey] = [];
@@ -112,14 +114,24 @@ const MyOrdersPage = () => {
   // Calculate statistics
   const stats = {
     totalOrders: filteredOrders.length,
-    totalSpent: filteredOrders.reduce((sum, order) => sum + order.totalPrice, 0),
+    totalSpent: filteredOrders.reduce(
+      (sum, order) => sum + order.totalPrice,
+      0,
+    ),
     paidOrders: filteredOrders.filter((order) => order.isPaid).length,
     deliveredOrders: filteredOrders.filter((order) => order.isDelivered).length,
   };
 
   if (loading) {
     return (
-      <div style={{ height: '50vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div
+        style={{
+          height: "50vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <div>Loading Your Orders...</div>
       </div>
     );
@@ -128,7 +140,10 @@ const MyOrdersPage = () => {
   const groupedOrders = groupByMonth ? groupOrdersByMonth() : null;
 
   return (
-    <div className="container" style={{ padding: '40px 20px', minHeight: '60vh' }}>
+    <div
+      className="container"
+      style={{ padding: "40px 20px", minHeight: "60vh" }}
+    >
       <div className="orders-header">
         <h1>My Orders</h1>
         <p className="orders-subtitle">View and manage your order history</p>
@@ -154,8 +169,8 @@ const MyOrdersPage = () => {
                   value={filterType}
                   onChange={(e) => {
                     setFilterType(e.target.value);
-                    setStartDate('');
-                    setEndDate('');
+                    setStartDate("");
+                    setEndDate("");
                   }}
                   className="filter-select"
                 >
@@ -168,7 +183,7 @@ const MyOrdersPage = () => {
                 </select>
               </div>
 
-              {filterType === 'custom' && (
+              {filterType === "custom" && (
                 <div className="custom-date-range">
                   <input
                     type="date"
@@ -205,7 +220,9 @@ const MyOrdersPage = () => {
                 <div className="stat-label">Total Orders</div>
               </div>
               <div className="stat-card">
-                <div className="stat-value">Rs. {stats.totalSpent.toFixed(2)}</div>
+                <div className="stat-value">
+                  Rs. {stats.totalSpent.toFixed(2)}
+                </div>
                 <div className="stat-label">Total Spent</div>
               </div>
               <div className="stat-card">
@@ -248,18 +265,22 @@ const MyOrdersPage = () => {
                         {monthOrders.map((order) => (
                           <tr key={order._id}>
                             <td>{order._id.substring(0, 8)}...</td>
-                            <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                            <td>
+                              {new Date(order.createdAt).toLocaleDateString()}
+                            </td>
                             <td>Rs. {order.totalPrice.toFixed(2)}</td>
                             <td>
                               <StatusBadge
                                 type="payment"
-                                status={order.isPaid ? 'paid' : 'unpaid'}
+                                status={order.isPaid ? "paid" : "unpaid"}
                               />
                             </td>
                             <td>
                               <StatusBadge
                                 type="order"
-                                status={order.isDelivered ? 'delivered' : 'pending'}
+                                status={
+                                  order.isDelivered ? "delivered" : "pending"
+                                }
                               />
                             </td>
                             <td>
@@ -277,8 +298,10 @@ const MyOrdersPage = () => {
                   </div>
                   <div className="month-summary">
                     <p>
-                      <TrendingUp size={16} /> Month Total: Rs.{' '}
-                      {monthOrders.reduce((sum, order) => sum + order.totalPrice, 0).toFixed(2)}
+                      <TrendingUp size={16} /> Month Total: Rs.{" "}
+                      {monthOrders
+                        .reduce((sum, order) => sum + order.totalPrice, 0)
+                        .toFixed(2)}
                     </p>
                   </div>
                 </div>
@@ -307,13 +330,13 @@ const MyOrdersPage = () => {
                       <td>
                         <StatusBadge
                           type="payment"
-                          status={order.isPaid ? 'paid' : 'unpaid'}
+                          status={order.isPaid ? "paid" : "unpaid"}
                         />
                       </td>
                       <td>
                         <StatusBadge
                           type="order"
-                          status={order.isDelivered ? 'delivered' : 'pending'}
+                          status={order.isDelivered ? "delivered" : "pending"}
                         />
                       </td>
                       <td>

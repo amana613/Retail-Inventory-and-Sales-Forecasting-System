@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema(
   {
@@ -12,7 +12,7 @@ const productSchema = new mongoose.Schema(
     image_url: { type: String },
     supplier_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Supplier',
+      ref: "Supplier",
       required: false,
     },
     weight: { type: String }, // e.g. "600g", "1L"
@@ -21,8 +21,8 @@ const productSchema = new mongoose.Schema(
     rating: { type: Number, default: 0 },
     numReviews: { type: Number, default: 0 },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-const Product = mongoose.model('Product', productSchema);
+const Product = mongoose.model("Product", productSchema);
 export default Product;

@@ -1,15 +1,15 @@
-import multer from 'multer';
-import path from 'path';
+import multer from "multer";
+import path from "path";
 
 // Set storage engine
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, 'uploads/receipts/');
+    cb(null, "uploads/receipts/");
   },
   filename(req, file, cb) {
     cb(
       null,
-      `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`
+      `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`,
     );
   },
 });
@@ -23,7 +23,7 @@ function checkFileType(file, cb) {
   if (extname && mimetype) {
     return cb(null, true);
   } else {
-    cb('Images only!');
+    cb("Images only!");
   }
 }
 

@@ -115,16 +115,16 @@
   .cart-content {
     grid-template-columns: 1fr;
   }
-  
+
   .cart-item {
     flex-wrap: wrap;
   }
-  
+
   .item-image {
     width: 100%;
     margin-bottom: 1rem;
   }
-  
+
   .item-image img {
     width: 100%;
     height: 150px;

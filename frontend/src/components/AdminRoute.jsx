@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import AuthContext from '../context/AuthContext';
+import React, { useContext } from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import AuthContext from "../context/AuthContext";
 
 const AdminRoute = () => {
   const { user } = useContext(AuthContext);
 
-  if (!user || user.role !== 'admin') {
+  if (!user || user.role !== "admin") {
     return <Navigate to="/login" replace />;
   }
 
